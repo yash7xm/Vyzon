@@ -91,16 +91,15 @@ const Spec = [
     [/^\w+/, 'IDENTIFIER'],
 ];
 
-
 class Tokenizer {
 
-    init(string){
+    init(string) {
         this._string = string;
         this._cursor = 0;
     }
 
     isEOF() {
-        return this._cursor === this._string.length;
+        return this._cursor == this._string.length;
     }
 
     hasMoreTokens() {
@@ -108,17 +107,13 @@ class Tokenizer {
     }
 
     getNextToken() {
-        if(!this.hasMoreTokens()) {
-            return null;
-        }
-
+        if(!this.hasMoreTokens) return null;
         const string = this._string.slice(this._cursor);
-
-        for(const [regexp, tokenType] of Spec){
+        for(const [regexp, tokenType] of Spec) {
             const tokenValue = this._match(regexp, string);
 
             if(tokenValue == null) continue;
-
+            
             if(tokenType == null) {
                 return this.getNextToken();
             }
@@ -126,20 +121,17 @@ class Tokenizer {
             return {
                 type: tokenType,
                 value: tokenValue
-            };
-        }
+            }
 
-        throw new SyntaxError(`Unexpected token: "${string[0]}"`);
+        }
     }
 
     _match(regexp, string) {
         const matched = regexp.exec(string);
-        if(matched == null) {
-            return null;
-        }
+        if(matched == null) return null;
         this._cursor += matched[0].length;
         return matched[0];
     }
 }
 
-module.exports = { Tokenizer }
+module.exports = {Tokenizer}
