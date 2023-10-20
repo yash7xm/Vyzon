@@ -118,11 +118,11 @@ class Parser {
         const token = this._lookahead;
 
         if(token == null) {
-            throw new SyntaxError(`Unexpected end of input, expected "${tokenType}"`)
+            throw new SyntaxError(`Unexpected end of input, expected: "${tokenType}"`);
         }
 
         if(token.type !== tokenType) {
-            throw new SyntaxError(`Unexpected token: "${token.value}", expected: ${tokenType} `)
+            throw new SyntaxError(`Unexpected token: "${token.value}", expected: "${tokenType}"`);
         }
 
         this._lookahead = this._tokenizer.getNextToken();
