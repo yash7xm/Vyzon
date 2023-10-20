@@ -1,9 +1,11 @@
-const { Tokenizer } = require('./Tokenizer');
+const { Tokenizer } = require('./Tokenizer.js');
+const { Parser } = require('./Parser.js');
 
 const tokenizer = new Tokenizer();
+const parser = new Parser();
 
 const program = `
-    let a = 5;
+    2 + 3 - 3;
 `
 
 tokenizer.init(program);
@@ -12,3 +14,8 @@ while(token != null) {
     console.log(token);
     token = tokenizer.getNextToken();
 }
+
+const ast = parser.parse(program);
+console.log(ast);
+console.log(JSON.stringify(ast,null,2));
+
