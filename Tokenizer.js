@@ -107,14 +107,16 @@ class Tokenizer {
     }
 
     getNextToken() {
-        if(!this.hasMoreTokens) return null;
+        if (!this.hasMoreTokens) return null;
+
         const string = this._string.slice(this._cursor);
-        for(const [regexp, tokenType] of Spec) {
+
+        for (const [regexp, tokenType] of Spec) {
             const tokenValue = this._match(regexp, string);
 
-            if(tokenValue == null) continue;
-            
-            if(tokenType == null) {
+            if (tokenValue == null) continue;
+
+            if (tokenType == null) {
                 return this.getNextToken();
             }
 
@@ -128,10 +130,13 @@ class Tokenizer {
 
     _match(regexp, string) {
         const matched = regexp.exec(string);
-        if(matched == null) return null;
+
+        if (matched == null) return null;
+
         this._cursor += matched[0].length;
+
         return matched[0];
     }
 }
 
-module.exports = {Tokenizer}
+module.exports = { Tokenizer }

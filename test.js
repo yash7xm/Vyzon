@@ -10,12 +10,12 @@ const program = `
 
 tokenizer.init(program);
 let token = tokenizer.getNextToken();
-while(token != null) {
+while (token != null) {
     console.log(token);
     token = tokenizer.getNextToken();
 }
 
 const ast = parser.parse(program);
 console.log(ast);
-console.log(JSON.stringify(ast,null,2));
+console.log(JSON.stringify(ast, null, 2));
 

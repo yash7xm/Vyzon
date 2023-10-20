@@ -25,7 +25,7 @@ class Parser {
 
     StatementList() {
         const statementList = [this.Statement()];
-        while(this._lookahead != null) {
+        while (this._lookahead != null) {
             statementList.push(this.Statement());
         }
 
@@ -52,7 +52,7 @@ class Parser {
     AdditiveExpression() {
         let left = this.MultipicativeExpression();
 
-        while(this._lookahead.type === 'ADDITIVE_OPERATOR') {
+        while (this._lookahead.type === 'ADDITIVE_OPERATOR') {
             const operator = this._eat('ADDITIVE_OPERATOR').value;
             const right = this.MultipicativeExpression();
             left = {
@@ -68,8 +68,8 @@ class Parser {
 
     MultipicativeExpression() {
         let left = this.PrimaryExpression();
-    
-        while(this._lookahead.type === 'MULTIPLICATIVE_OPERATOR') {
+
+        while (this._lookahead.type === 'MULTIPLICATIVE_OPERATOR') {
             const operator = this._eat('MULTIPLICATIVE_OPERATOR').value;
             const right = this.PrimaryExpression();
             left = {
@@ -91,7 +91,7 @@ class Parser {
     }
 
     PrimaryExpression() {
-        if(this._isLiteral(this._lookahead.type)){
+        if (this._isLiteral(this._lookahead.type)) {
             return this.Literal();
         }
         return this.ParethesizedExpression();
@@ -117,11 +117,11 @@ class Parser {
     _eat(tokenType) {
         const token = this._lookahead;
 
-        if(token == null) {
+        if (token == null) {
             throw new SyntaxError(`Unexpected end of input, expected: "${tokenType}"`);
         }
 
-        if(token.type !== tokenType) {
+        if (token.type !== tokenType) {
             throw new SyntaxError(`Unexpected token: "${token.value}", expected: "${tokenType}"`);
         }
 
