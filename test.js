@@ -5,7 +5,7 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-    2 + 3 - 3;
+    2 + 3 * 6;
 `
 
 tokenizer.init(program);

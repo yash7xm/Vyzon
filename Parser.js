@@ -50,16 +50,33 @@ class Parser {
     }
 
     AdditiveExpression() {
-        let left = this.Literal();
+        let left = this.MultipicativeExpression();
 
         while(this._lookahead.type === 'ADDITIVE_OPERATOR') {
             const operator = this._eat('ADDITIVE_OPERATOR').value;
-            const right = this.Literal();
+            const right = this.MultipicativeExpression();
             left = {
                 type: 'BinaryExpression',
                 operator,
                 left,
                 right,
+            }
+        }
+
+        return left;
+    }
+
+    MultipicativeExpression() {
+        let left = this.Literal();
+    
+        while(this._lookahead.type === 'MULTIPLICATIVE_OPERATOR') {
+            const operator = this._eat('MULTIPLICATIVE_OPERATOR').value;
+            const right = this.Literal();
+            left = {
+                type: 'BinaryExpression',
+                operator,
+                left,
+                right
             }
         }
 
