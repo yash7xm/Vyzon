@@ -67,11 +67,11 @@ class Parser {
     }
 
     MultipicativeExpression() {
-        let left = this.Literal();
+        let left = this.PrimaryExpression();
     
         while(this._lookahead.type === 'MULTIPLICATIVE_OPERATOR') {
             const operator = this._eat('MULTIPLICATIVE_OPERATOR').value;
-            const right = this.Literal();
+            const right = this.PrimaryExpression();
             left = {
                 type: 'BinaryExpression',
                 operator,
@@ -81,6 +81,25 @@ class Parser {
         }
 
         return left;
+    }
+
+    ParethesizedExpression() {
+        this._eat('(');
+        const expression = this.Expression();
+        this._eat(')');
+        return expression;
+    }
+
+    PrimaryExpression() {
+        if(this._isLiteral(this._lookahead.type)){
+            return this.Literal();
+        }
+        return this.ParethesizedExpression();
+    }
+
+
+    _isLiteral(tokenType) {
+        return tokenType === 'NUMBER'
     }
 
     Literal() {
