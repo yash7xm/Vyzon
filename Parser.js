@@ -311,12 +311,6 @@ class Parser {
                 return this.Identifier();
             case ('('):
                 return this.ParethesizedExpression();
-            case ('true'):
-                return this.BooleanLiteral(true);
-            case ('false'):
-                return this.BooleanLiteral(false);
-            case ('null'):
-                return this.NullLiteral();
             default:
                 throw new SyntaxError(`Unexpected Primary Expression`)
         }
@@ -325,7 +319,8 @@ class Parser {
 
 
     _isLiteral(tokenType) {
-        return tokenType === 'NUMBER' || tokenType === 'STRING'
+        return tokenType === 'NUMBER' || tokenType === 'STRING' ||
+        tokenType === 'true' || tokenType === 'false' || tokenType === 'null';
     }
 
     Literal() {
@@ -334,8 +329,14 @@ class Parser {
                 return this.NumericLiteral();
             case 'STRING':
                 return this.StringLiteral();
+            case 'true':
+                return this.BooleanLiteral(true);
+            case 'false':
+                return this.BooleanLiteral(false);
+            case 'null':
+                return this.NullLiteral();
         }
-        throw new SyntaxError(`Literal: Unexpected Literal Prduction`);
+        throw new SyntaxError(`Literal: unexpected literal production.`);
     }
 
     NumericLiteral() {
