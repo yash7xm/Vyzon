@@ -5,7 +5,15 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-    let a,b=10;
+    if(a+5){
+        b = 5;
+        if(j) {
+            c=d;
+        }
+    }
+    else {
+        c= d;
+    }
 `
 
 console.log("==================================");
