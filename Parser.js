@@ -199,10 +199,28 @@ class Parser {
     }
 
     EqualityExpression() {
-        let left = this.AdditiveExpression();
+        let left = this.RelationalExpression();
 
         while(this._lookahead.type === 'EQUALITY_OPERATOR') {
             const operator = this._eat('EQUALITY_OPERATOR').value;
+            const right = this.RelationalExpression();
+
+            return {
+                type: 'BinaryExpression',
+                operator,
+                left,
+                right
+            }
+        }
+
+        return left;
+    }
+
+    RelationalExpression() {
+        let left = this.AdditiveExpression();
+
+        while(this._lookahead.type == 'RELATIONAL_OPERATOR') {
+            const operator = this._eat('RELATIONAL_OPERATOR').value;
             const right = this.AdditiveExpression();
 
             return {
