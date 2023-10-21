@@ -5,7 +5,7 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-    "yash";
+    a + b * c;
 `
 
 console.log("==================================");

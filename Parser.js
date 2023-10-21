@@ -114,12 +114,27 @@ class Parser {
         return expression;
     }
 
+    Identifier() {
+        const name = this._eat('IDENTIFIER').value;
+        return {
+            type: 'Identifier',
+            name
+        }
+    }
+
     PrimaryExpression() {
         if (this._isLiteral(this._lookahead.type)) {
-            console.log('in here')
             return this.Literal();
         }
-        return this.ParethesizedExpression();
+        switch (this._lookahead.type) {
+            case ('IDENTIFIER'):
+                return this.Identifier();
+            case ('('):
+                return this.ParethesizedExpression();
+            default:
+                throw new SyntaxError(`Unexpected Primary Expression`)
+        }
+
     }
 
 
