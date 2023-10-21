@@ -5,7 +5,7 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-    a /= b + c;
+    let a,b=10;
 `
 
 console.log("==================================");
