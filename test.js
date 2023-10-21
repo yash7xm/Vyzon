@@ -5,15 +5,7 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-    if(a+5){
-        b = 5;
-        if(j) {
-            c=d;
-        }
-    }
-    else {
-        c= d;
-    }
+    (a || b) || c;
 `
 
 console.log("==================================");

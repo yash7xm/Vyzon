@@ -145,7 +145,7 @@ class Parser {
     }
 
     AssignmentExpression() {
-        let left = this.AdditiveExpression();
+        let left = this.LogicalORExpression();
 
         while (this._isAssignmentOperator(this._lookahead.type)) {
             const operator = this.AssignmentOperator().value;
@@ -155,6 +155,24 @@ class Parser {
                 type: 'AssignmentExpression',
                 operator,
                 left: this._checkValidAssignmentTarget(left),
+                right
+            }
+        }
+
+        return left;
+    }
+
+    LogicalORExpression() {
+        let left = this.AdditiveExpression();
+
+        while(this._lookahead.type === 'LOGICAL_OR') {
+            const operator = this._eat('LOGICAL_OR').value;
+            const right = this.AdditiveExpression();
+
+            return {
+                type: 'LogicalExpression',
+                operator,
+                left,
                 right
             }
         }
