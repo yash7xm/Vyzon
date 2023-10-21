@@ -181,14 +181,32 @@ class Parser {
     }
 
     LogicalANDExpression() {
-        let left = this.AdditiveExpression();
+        let left = this.EqualityExpression();
 
         while(this._lookahead.type === 'LOGICAL_AND') {
             const operator = this._eat('LOGICAL_AND').value;
-            const right = this.AdditiveExpression();
+            const right = this.EqualityExpression();
 
             return {
                 type: 'LogicalANDExpression',
+                operator,
+                left,
+                right
+            }
+        }
+
+        return left;
+    }
+
+    EqualityExpression() {
+        let left = this.AdditiveExpression();
+
+        while(this._lookahead.type === 'EQUALITY_OPERATOR') {
+            const operator = this._eat('EQUALITY_OPERATOR').value;
+            const right = this.AdditiveExpression();
+
+            return {
+                type: 'BinaryExpression',
                 operator,
                 left,
                 right
