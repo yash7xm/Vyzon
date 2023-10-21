@@ -163,14 +163,32 @@ class Parser {
     }
 
     LogicalORExpression() {
-        let left = this.AdditiveExpression();
+        let left = this.LogicalANDExpression();
 
         while(this._lookahead.type === 'LOGICAL_OR') {
             const operator = this._eat('LOGICAL_OR').value;
-            const right = this.AdditiveExpression();
+            const right = this.LogicalANDExpression();
 
             return {
                 type: 'LogicalExpression',
+                operator,
+                left,
+                right
+            }
+        }
+
+        return left;
+    }
+
+    LogicalANDExpression() {
+        let left = this.AdditiveExpression();
+
+        while(this._lookahead.type === 'LOGICAL_AND') {
+            const operator = this._eat('LOGICAL_AND').value;
+            const right = this.AdditiveExpression();
+
+            return {
+                type: 'LogicalANDExpression',
                 operator,
                 left,
                 right
