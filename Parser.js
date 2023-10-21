@@ -140,7 +140,7 @@ class Parser {
 
         let alternate = null;
 
-        alternate = this._CheckElifOrElseStatement();
+        alternate = this._lookahead != null ? this._CheckElifOrElseStatement(): null;
 
         return {
             type: 'IfStatement',
@@ -158,7 +158,7 @@ class Parser {
             case ('else'):
                 return this.ElseStatement();
             default: 
-                throw new SyntaxError('Unexpected else statement');
+                return null;
         }
     }
 
@@ -170,7 +170,7 @@ class Parser {
         const consequent = this.Statement();
         
         let alternate = null;
-        alternate = this._CheckElifOrElseStatement();
+        alternate = this._lookahead != null ? this._CheckElifOrElseStatement(): null;
 
         return {
             type: 'IfStatemnt',
@@ -200,7 +200,7 @@ class Parser {
     }
 
     AssignmentExpression() {
-        let left = this.LogicalORExpression();
+        let left = this.ConditionalExpression();
 
         while (this._isAssignmentOperator(this._lookahead.type)) {
             const operator = this.AssignmentOperator().value;
@@ -215,6 +215,23 @@ class Parser {
         }
 
         return left;
+    }
+
+    ConditionalExpression() {
+        let test = this.LogicalORExpression();
+        if(this._lookahead.type === '?')
+        this._eat('?');
+        else return test;
+        let consequent = this.Expression();
+        this._eat(':');
+        let alternate = this.Expression();
+
+        return {
+            type: 'ConditiionalExpression',
+            test,
+            consequent,
+            alternate
+        }
     }
 
     LogicalORExpression() {
@@ -322,6 +339,7 @@ class Parser {
 
         return left;
     }
+
 
     ParethesizedExpression() {
         this._eat('(');

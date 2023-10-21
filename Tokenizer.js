@@ -23,6 +23,8 @@ const Spec = [
     [/^\]/, ']'], // RightBracket
     [/^,/, ','],  // Comma
     [/^\./, '.'], // Dot
+    [/^\?/, '?'], // Question Mark
+    [/^:/, ':'],   // Colon
 
 
     // Relational Operators

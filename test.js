@@ -5,18 +5,7 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-if (x > 10){
-    ("x is greater than 10");
-}
-
-elif (x < 10){
-    ("x is less than 10");
-}
-
-else{
-    ("x is equal to 10");
-}
-
+x = (3 * (a + b)) + (4 / (C ? D : E));
 `
 
 console.log("==================================");
