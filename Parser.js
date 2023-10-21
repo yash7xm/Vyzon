@@ -140,7 +140,7 @@ class Parser {
 
         let alternate = null;
 
-        alternate = this._lookahead != null ? this._CheckElifOrElseStatement(): null;
+        alternate = this._lookahead != null ? this._CheckElifOrElseStatement() : null;
 
         return {
             type: 'IfStatement',
@@ -152,12 +152,12 @@ class Parser {
     }
 
     _CheckElifOrElseStatement() {
-        switch( this._lookahead.type ){
+        switch (this._lookahead.type) {
             case ('elif'):
                 return this.ElifStatement();
             case ('else'):
                 return this.ElseStatement();
-            default: 
+            default:
                 return null;
         }
     }
@@ -168,9 +168,9 @@ class Parser {
         const test = this.Expression();
         this._eat(')');
         const consequent = this.Statement();
-        
+
         let alternate = null;
-        alternate = this._lookahead != null ? this._CheckElifOrElseStatement(): null;
+        alternate = this._lookahead != null ? this._CheckElifOrElseStatement() : null;
 
         return {
             type: 'IfStatemnt',
@@ -219,8 +219,8 @@ class Parser {
 
     ConditionalExpression() {
         let test = this.LogicalORExpression();
-        if(this._lookahead.type === '?')
-        this._eat('?');
+        if (this._lookahead.type === '?')
+            this._eat('?');
         else return test;
         let consequent = this.Expression();
         this._eat(':');
