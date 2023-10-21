@@ -5,9 +5,17 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-    2 + ;
+    {
+        2+3;
+        ;
+    }
+    {
+        2;
+    }
+    0;
 `
 
+console.log("==================================");
 tokenizer.init(program);
 let token = tokenizer.getNextToken();
 while (token != null) {
@@ -15,7 +23,7 @@ while (token != null) {
     token = tokenizer.getNextToken();
 }
 
+console.log("==================================");
 const ast = parser.parse(program);
-console.log(ast);
 console.log(JSON.stringify(ast, null, 2));
 
