@@ -70,7 +70,25 @@ class Parser {
     }
 
     Expression() {
-        return this.AdditiveExpression();
+        return this.AssignmentExpression();
+    }
+
+    AssignmentExpression() {
+        let left = this.AdditiveExpression();
+
+        while (this._isAssignmentOperator(this._lookahead.type)) {
+            const operator = this.AssignmentOperator().value;
+            const right = this.AssignmentExpression();
+
+            return {
+                type: 'AssignmentExpression',
+                operator,
+                left: this._checkValidAssignmentTarget(left),
+                right
+            }
+        }
+
+        return left;
     }
 
     AdditiveExpression() {
@@ -112,6 +130,25 @@ class Parser {
         const expression = this.Expression();
         this._eat(')');
         return expression;
+    }
+
+    _isAssignmentOperator(node) {
+        return node === 'SIMPLE_ASSIGN' || node === 'COMPLEX_ASSIGN'
+    }
+
+    AssignmentOperator() {
+        if (this._lookahead.type === 'SIMPLE_ASSIGN') {
+            return this._eat('SIMPLE_ASSIGN');
+        }
+        return this._eat('COMPLEX_ASSIGN');
+    }
+
+    _checkValidAssignmentTarget(node) {
+        if (node.type === 'Identifier') {
+            return node;
+        }
+
+        throw new SyntaxError('Invalid left-hand side in assignment expression');
     }
 
     Identifier() {
