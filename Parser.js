@@ -116,6 +116,7 @@ class Parser {
 
     PrimaryExpression() {
         if (this._isLiteral(this._lookahead.type)) {
+            console.log('in here')
             return this.Literal();
         }
         return this.ParethesizedExpression();
@@ -123,11 +124,17 @@ class Parser {
 
 
     _isLiteral(tokenType) {
-        return tokenType === 'NUMBER'
+        return tokenType === 'NUMBER' || tokenType === 'STRING'
     }
 
     Literal() {
-        return this.NumericLiteral();
+        switch (this._lookahead.type) {
+            case 'NUMBER':
+                return this.NumberLiteral();
+            case 'STRING':
+                return this.StringLiteral();
+        }
+        throw new SyntaxError(`Literal: Unexpected Literal Prduction`);
     }
 
     NumericLiteral() {
@@ -135,6 +142,14 @@ class Parser {
         return {
             type: 'NumbericLiteral',
             value: Number(token.value)
+        }
+    }
+
+    StringLiteral() {
+        const token = this._eat('STRING');
+        return {
+            type: 'StringLiteral',
+            value: token.value.slice(1, -1)
         }
     }
 
