@@ -5,7 +5,12 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-    (a > b) <= c;
+    if(true) {
+        a>b;
+    }
+    else {
+        heha;
+    }
 `
 
 console.log("==================================");

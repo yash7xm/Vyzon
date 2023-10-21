@@ -115,10 +115,10 @@ class Parser {
         const test = this.Expression();
         this._eat(')');
         const consequent = this.Statement();
-        
+
         let alternate = null;
 
-        if(this._lookahead != null && this._lookahead.type === 'else') {
+        if (this._lookahead != null && this._lookahead.type === 'else') {
             this._eat('else');
             alternate = this.Statement();
         }
@@ -165,7 +165,7 @@ class Parser {
     LogicalORExpression() {
         let left = this.LogicalANDExpression();
 
-        while(this._lookahead.type === 'LOGICAL_OR') {
+        while (this._lookahead.type === 'LOGICAL_OR') {
             const operator = this._eat('LOGICAL_OR').value;
             const right = this.LogicalANDExpression();
 
@@ -183,7 +183,7 @@ class Parser {
     LogicalANDExpression() {
         let left = this.EqualityExpression();
 
-        while(this._lookahead.type === 'LOGICAL_AND') {
+        while (this._lookahead.type === 'LOGICAL_AND') {
             const operator = this._eat('LOGICAL_AND').value;
             const right = this.EqualityExpression();
 
@@ -201,7 +201,7 @@ class Parser {
     EqualityExpression() {
         let left = this.RelationalExpression();
 
-        while(this._lookahead.type === 'EQUALITY_OPERATOR') {
+        while (this._lookahead.type === 'EQUALITY_OPERATOR') {
             const operator = this._eat('EQUALITY_OPERATOR').value;
             const right = this.RelationalExpression();
 
@@ -219,7 +219,7 @@ class Parser {
     RelationalExpression() {
         let left = this.AdditiveExpression();
 
-        while(this._lookahead.type == 'RELATIONAL_OPERATOR') {
+        while (this._lookahead.type == 'RELATIONAL_OPERATOR') {
             const operator = this._eat('RELATIONAL_OPERATOR').value;
             const right = this.AdditiveExpression();
 
@@ -311,6 +311,12 @@ class Parser {
                 return this.Identifier();
             case ('('):
                 return this.ParethesizedExpression();
+            case ('true'):
+                return this.BooleanLiteral(true);
+            case ('false'):
+                return this.BooleanLiteral(false);
+            case ('null'):
+                return this.NullLiteral();
             default:
                 throw new SyntaxError(`Unexpected Primary Expression`)
         }
@@ -345,6 +351,22 @@ class Parser {
         return {
             type: 'StringLiteral',
             value: token.value.slice(1, -1)
+        }
+    }
+
+    BooleanLiteral(value) {
+        this._eat(value ? 'true' : 'false');
+        return {
+            type: 'BooleanLiteral',
+            value,
+        }
+    }
+
+    NullLiteral() {
+        this._eat('null');
+        return {
+            type: 'NullLiteral',
+            value: null,
         }
     }
 
