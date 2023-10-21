@@ -5,12 +5,18 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-    if(true) {
-        a>b;
-    }
-    else {
-        heha;
-    }
+if (x > 10){
+    ("x is greater than 10");
+}
+
+elif (x < 10){
+    ("x is less than 10");
+}
+
+else{
+    ("x is equal to 10");
+}
+
 `
 
 console.log("==================================");

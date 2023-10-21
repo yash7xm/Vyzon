@@ -41,6 +41,7 @@ const Spec = [
     // Keywords
     [/^\blet\b/, 'let'],
     [/^\bif\b/, 'if'],
+    [/^\belif\b/, 'elif'],
     [/^\belse\b/, 'else'],
     [/^\btrue\b/, 'true'],
     [/^\bfalse\b/, 'false'],

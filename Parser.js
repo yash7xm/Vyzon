@@ -109,6 +109,28 @@ class Parser {
         return this.AssignmentExpression();
     }
 
+    // IfStatement() {
+    //     this._eat('if');
+    //     this._eat('(');
+    //     const test = this.Expression();
+    //     this._eat(')');
+    //     const consequent = this.Statement();
+
+    //     let alternate = null;
+
+    //     if (this._lookahead != null && this._lookahead.type === 'else') {
+    //         this._eat('else');
+    //         alternate = this.Statement();
+    //     }
+
+    //     return {
+    //         type: 'IfStatement',
+    //         test,
+    //         consequent,
+    //         alternate,
+    //     }
+    // }
+
     IfStatement() {
         this._eat('if');
         this._eat('(');
@@ -118,17 +140,50 @@ class Parser {
 
         let alternate = null;
 
-        if (this._lookahead != null && this._lookahead.type === 'else') {
-            this._eat('else');
-            alternate = this.Statement();
-        }
+        alternate = this._CheckElifOrElseStatement();
 
         return {
             type: 'IfStatement',
             test,
             consequent,
-            alternate,
+            alternate
         }
+
+    }
+
+    _CheckElifOrElseStatement() {
+        switch( this._lookahead.type ){
+            case ('elif'):
+                return this.ElifStatement();
+            case ('else'):
+                return this.ElseStatement();
+            default: 
+                throw new SyntaxError('Unexpected else statement');
+        }
+    }
+
+    ElifStatement() {
+        this._eat('elif');
+        this._eat('(');
+        const test = this.Expression();
+        this._eat(')');
+        const consequent = this.Statement();
+        
+        let alternate = null;
+        alternate = this._CheckElifOrElseStatement();
+
+        return {
+            type: 'IfStatemnt',
+            test,
+            consequent,
+            alternate
+        }
+
+    }
+
+    ElseStatement() {
+        this._eat('else');
+        return this.Statement();
     }
 
     ExpressionStatement() {
@@ -320,7 +375,7 @@ class Parser {
 
     _isLiteral(tokenType) {
         return tokenType === 'NUMBER' || tokenType === 'STRING' ||
-        tokenType === 'true' || tokenType === 'false' || tokenType === 'null';
+            tokenType === 'true' || tokenType === 'false' || tokenType === 'null';
     }
 
     Literal() {
