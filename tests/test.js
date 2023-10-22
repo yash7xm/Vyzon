@@ -5,7 +5,10 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-(x > 5 ? ++x : y) ? "Greater" : (y < 3 ? "Less" : "Equal");
+while(true) {
+    hello;
+  }
+  
 `
 
 console.log("==================================");

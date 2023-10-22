@@ -42,6 +42,10 @@ class Parser {
                 return this.VariableStatement();
             case 'if':
                 return this.IfStatement();
+            case 'while':
+            case 'do':
+            case 'for':
+                return this.IterationStatement();
             default:
                 return this.ExpressionStatement();
         }
@@ -184,6 +188,33 @@ class Parser {
     ElseStatement() {
         this._eat('else');
         return this.Statement();
+    }
+
+    IterationStatement() {
+        switch (this._lookahead.type) {
+            case ('while'):
+                return this.WhileStatement();
+            case ('do'):
+                return this.DoStatement();
+            case ('for'):
+                return this.ForStatement();
+            default:
+                return null;
+        }
+    }
+
+    WhileStatement() {
+        this._eat('while');
+        this._eat('(');
+        let test = this.Expression();
+        this._eat(')');
+        let body = this.Statement();
+
+        return {
+            type: 'WhileStatement',
+            test,
+            body
+        }
     }
 
     ExpressionStatement() {
@@ -351,11 +382,11 @@ class Parser {
                 break;
         }
 
-        if(operator != null) {
+        if (operator != null) {
             return {
                 type: 'UnaryExpression',
                 operator,
-                argument : this.UnaryExpression()
+                argument: this.UnaryExpression()
             }
         }
 
