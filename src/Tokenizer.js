@@ -76,7 +76,6 @@ const Spec = [
     [/^[+\-]/, 'ADDITIVE_OPERATOR'],
     [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
 
-
     // --------------------------------------
     // Numbers:
     [/^\d+/, 'NUMBER'],

@@ -1,14 +1,13 @@
 const { Tokenizer } = require('../src/Tokenizer.js');
 const { Parser } = require('../src/Parser.js');
+const { Generator } = require('../src/Generator.js');
 
 const tokenizer = new Tokenizer();
 const parser = new Parser();
+const gen = new Generator();
 
 const program = `
-def sum(iop,lpo) {
-    sum += 10;
-    return sum;
-}
+    1 + 2 * 3;
 `
 
 console.log("==================================");
@@ -22,4 +21,6 @@ while (token != null) {
 console.log("==================================");
 const ast = parser.parse(program);
 console.log(JSON.stringify(ast, null, 2));
+const code = gen.generate(ast.body);
+console.log(code);
 

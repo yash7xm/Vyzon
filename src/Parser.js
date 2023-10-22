@@ -562,7 +562,7 @@ class Parser {
     NumericLiteral() {
         const token = this._eat('NUMBER');
         return {
-            type: 'NumbericLiteral',
+            type: 'NumericLiteral',
             value: Number(token.value)
         }
     }
