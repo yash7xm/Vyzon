@@ -13,10 +13,8 @@ class Generator {
     }
 
     StatementsList() {
-        console.log(this._string.length);
         let body = [];
         for (let i = 0; i < this._string.length; i++) {
-            console.log(i);
             switch (this._string[i].type) {
                 case ('ExpressionStatement'):
                     body.push(this.ExpressionStatement(this._string[i].expression))
@@ -45,7 +43,6 @@ class Generator {
         let operator = expression.operator;
 
         this._code = `${left} ${operator} ${right}`;
-        console.log(this._code);
         return this._code;
     }
 
@@ -55,7 +52,7 @@ class Generator {
 
     StringLiteral(node) {
         return `"${node.value}"`
-    } 
+    }
 
     Identifier(node) {
         return `${node.name}`;
