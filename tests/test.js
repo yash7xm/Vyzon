@@ -1,5 +1,5 @@
-const { Tokenizer } = require('./Tokenizer.js');
-const { Parser } = require('./Parser.js');
+const { Tokenizer } = require('../src/Tokenizer.js');
+const { Parser } = require('../src/Parser.js');
 
 const tokenizer = new Tokenizer();
 const parser = new Parser();
