@@ -227,7 +227,7 @@ class Parser {
         let alternate = this.Expression();
 
         return {
-            type: 'ConditiionalExpression',
+            type: 'ConditionalExpression',
             test,
             consequent,
             alternate
@@ -324,11 +324,11 @@ class Parser {
     }
 
     MultipicativeExpression() {
-        let left = this.PrimaryExpression();
+        let left = this.UnaryExpression();
 
         while (this._lookahead.type === 'MULTIPLICATIVE_OPERATOR') {
             const operator = this._eat('MULTIPLICATIVE_OPERATOR').value;
-            const right = this.PrimaryExpression();
+            const right = this.UnaryExpression();
             left = {
                 type: 'BinaryExpression',
                 operator,
@@ -338,6 +338,32 @@ class Parser {
         }
 
         return left;
+    }
+
+    UnaryExpression() {
+        let operator;
+        switch (this._lookahead.type) {
+            case ('ADDITIVE_OPERATOR'):
+                operator = this._eat('ADDITIVE_OPERATOR').value;
+                break;
+            case ('LOGICAL_NOT'):
+                operator = this._eat('LOGICAL_NOT').value;
+                break;
+        }
+
+        if(operator != null) {
+            return {
+                type: 'UnaryExpression',
+                operator,
+                argument : this.UnaryExpression()
+            }
+        }
+
+        return this.LeftHandSideExpression();
+    }
+
+    LeftHandSideExpression() {
+        return this.PrimaryExpression();
     }
 
 
