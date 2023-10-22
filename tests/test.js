@@ -5,9 +5,9 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-do {
-    let a= 5;
-  }while(false);
+for (let i = 0; i < 10; i += 1) {
+    x += i;
+  }
 `
 
 console.log("==================================");

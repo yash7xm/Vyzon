@@ -233,6 +233,38 @@ class Parser {
         }
     }
 
+    ForStatement() {
+        this._eat('for');
+        this._eat('(');
+
+
+        let init = this._lookahead.type !== ';' ? this.InitForStatement() : null;
+        this._eat(';');
+
+        let test = this._lookahead.type !== ';' ? this.Expression() : null;
+        this._eat(';');
+
+        let update = this._lookahead.type !== ';' ? this.Expression() : null;
+        this._eat(')');
+
+        let body = this.Statement();
+
+        return {
+            type: 'ForStatement',
+            init,
+            test,
+            update,
+            body
+        }
+    }
+
+    InitForStatement() {
+        if(this._lookahead.type === 'let'){
+            return this.VariableStatementInit();
+        }
+        return thhis.Expression();
+    }
+
     ExpressionStatement() {
         const expression = this.Expression();
         this._eat(';');
