@@ -33,7 +33,18 @@ class Generator {
                 return this.Identifier(expression);
             case ('BinaryExpression'):
                 return this.BinaryExpression(expression);
+            case ('AssignmentExpression'):
+                return this.AssignmentExpression(expression);
         }
+    }
+
+    AssignmentExpression(node) {
+        let left = this.ExpressionStatement(node.left);
+        let right = this.ExpressionStatement(node.right);
+
+        let operator = node.operator;
+
+        return `${left} ${operator} ${right}`;
     }
 
     BinaryExpression(expression) {
