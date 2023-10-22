@@ -5,14 +5,10 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-for (;;) {
-    if(y>9) {
-        let h= 'hi';
-    }
-    elif(z) {
-        'hi';
-    }
-  }
+def sum(iop,lpo) {
+    sum += 10;
+    return sum;
+}
 `
 
 console.log("==================================");

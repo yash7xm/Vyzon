@@ -42,6 +42,10 @@ class Parser {
                 return this.VariableStatement();
             case 'if':
                 return this.IfStatement();
+            case 'def':
+                return this.FucntionDeclaration();
+            case 'return':
+                return this.ReturnStatement();
             case 'while':
             case 'do':
             case 'for':
@@ -263,6 +267,44 @@ class Parser {
             return this.VariableStatementInit();
         }
         return thhis.Expression();
+    }
+    
+    FucntionDeclaration() {
+        this._eat('def');
+        const name = this.Identifier();
+
+        this._eat('(');
+        const params = this._lookahead.type !== ')' ? this.FormalParameterList() : [];
+        this._eat(')');
+
+        const body = this.BlockStatement();
+
+        return {
+            type: 'FunctionDeclatration',
+            name,
+            params,
+            body
+        }
+    }
+
+    FormalParameterList() {
+        let params = [];
+        do {
+            params.push(this.Identifier());
+        }
+        while(this._lookahead.type === ',' && this._eat(','));
+
+        return params;
+    }
+
+    ReturnStatement() {
+        this._eat('return');
+        let argument = this._lookahead.type !== ';' ? this.Expression() : null;
+        this._eat(';');
+        return {
+            type: 'ReturnStatement',
+            argument
+        }
     }
 
     ExpressionStatement() {
