@@ -35,7 +35,17 @@ class Generator {
                 return this.BinaryExpression(expression);
             case ('AssignmentExpression'):
                 return this.AssignmentExpression(expression);
+            case ('ConditionalExpression'):
+                return this.ConditionalExpression(expression);
         }
+    }
+
+    ConditionalExpression(node) {
+        let test = this.ExpressionStatement(node.test);
+        let consequent = this.ExpressionStatement(node.consequent);
+        let alternate = this.ExpressionStatement(node.alternate);
+
+        return `${test} ? ${consequent} : ${alternate}`;
     }
 
     AssignmentExpression(node) {

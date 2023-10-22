@@ -7,7 +7,7 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
-    a = 5 + 6;
+    a != b;
 `
 
 console.log("==================================");
