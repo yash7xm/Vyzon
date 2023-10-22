@@ -7,10 +7,13 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
+   {
     a = b||c;
     a = b;
     !!b;
     a&&c;
+   }
+    a *= x;
 `
 
 console.log("==================================");

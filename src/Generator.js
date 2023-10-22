@@ -9,18 +9,27 @@ class Generator {
     generate(string) {
         this._string = string;
 
-        return this.StatementsList();
+        return this.StatementsList(this._string);
     }
 
-    StatementsList() {
-        let body = [];
-        for (let i = 0; i < this._string.length; i++) {
-            switch (this._string[i].type) {
+    StatementsList(body) {
+        let list = [];
+        for (let i = 0; i < body.length; i++) {
+            switch (body[i].type) {
                 case ('ExpressionStatement'):
-                    body.push(this.ExpressionStatement(this._string[i].expression))
+                    list.push(this.ExpressionStatement(body[i].expression));
+                    break;
+                case ('BlockStatement'):
+                    list.push(this.BlockStatement(body[i].body));
+                    break;
             }
         }
-        return body;
+        return list;
+    }
+
+    BlockStatement(expression) {
+        let body = this.StatementsList(expression);
+        return `${body}`;
     }
 
     ExpressionStatement(expression) {
