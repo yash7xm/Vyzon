@@ -37,8 +37,13 @@ class Generator {
                 return this.AssignmentExpression(expression);
             case ('ConditionalExpression'):
                 return this.ConditionalExpression(expression);
+            case ('LogicalORExpression'):
+                return this.LogicalORExpression(expression);
+            case ('UnaryExpression'): 
+                return this.UnaryExpression(expression);
         }
     }
+
 
     ConditionalExpression(node) {
         let test = this.ExpressionStatement(node.test);
@@ -57,6 +62,14 @@ class Generator {
         return `${left} ${operator} ${right}`;
     }
 
+    LogicalORExpression(node) {
+        let left = this.ExpressionStatement(node.left);
+        let right = this.ExpressionStatement(node.right);
+        let operator = node.operator;
+
+        return `${left} ${operator} ${right}`;
+    }
+
     BinaryExpression(expression) {
         let left = this.ExpressionStatement(expression.left);
         let right = this.ExpressionStatement(expression.right);
@@ -65,6 +78,13 @@ class Generator {
 
         this._code = `${left} ${operator} ${right}`;
         return this._code;
+    }
+
+    UnaryExpression(node) {
+        let operator = node.operator;
+        let argument = this.ExpressionStatement(node.argument);
+
+        return `${operator}${argument}`
     }
 
     NumericLiteral(node) {

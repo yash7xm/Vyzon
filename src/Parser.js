@@ -363,7 +363,7 @@ class Parser {
             const right = this.LogicalANDExpression();
 
             return {
-                type: 'LogicalExpression',
+                type: 'LogicalORExpression',
                 operator,
                 left,
                 right
