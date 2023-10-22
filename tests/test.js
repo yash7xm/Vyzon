@@ -5,8 +5,13 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-for (let i = 0; i < 10; i += 1) {
-    x += i;
+for (;;) {
+    if(y>9) {
+        let h= 'hi';
+    }
+    elif(z) {
+        'hi';
+    }
   }
 `
 

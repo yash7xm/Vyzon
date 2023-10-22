@@ -244,7 +244,7 @@ class Parser {
         let test = this._lookahead.type !== ';' ? this.Expression() : null;
         this._eat(';');
 
-        let update = this._lookahead.type !== ';' ? this.Expression() : null;
+        let update = this._lookahead.type !== ')' ? this.Expression() : null;
         this._eat(')');
 
         let body = this.Statement();
