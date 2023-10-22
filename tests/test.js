@@ -7,13 +7,7 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
-{
-    a = b||c;
-    a = b;
-    !!b;
-    a&&c;
-}
-    a *= x;
+ 1 + 2 * 3;
 `
 
 console.log("==================================");
@@ -27,6 +21,17 @@ while (token != null) {
 console.log("==================================");
 const ast = parser.parse(program);
 console.log(JSON.stringify(ast, null, 2));
-const code = gen.generate(ast.body);
+let code = gen.generate(ast.body);
+
+console.log("==================================");
 console.log(code);
+code += 'console.log(1 + 2 * 3)'
+
+console.log("==================================");
+try {
+  eval(code);
+} catch (error) {
+  console.error("Error running the generated code:", error);
+}
+
 
