@@ -7,7 +7,8 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
-    1 + 2 * 3;
+    a + b + 1 - "yash";
+    "b";
 `
 
 console.log("==================================");
