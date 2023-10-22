@@ -195,7 +195,7 @@ class Parser {
             case ('while'):
                 return this.WhileStatement();
             case ('do'):
-                return this.DoStatement();
+                return this.DoWhileStatement();
             case ('for'):
                 return this.ForStatement();
             default:
@@ -214,6 +214,22 @@ class Parser {
             type: 'WhileStatement',
             test,
             body
+        }
+    }
+
+    DoWhileStatement() {
+        this._eat('do');
+        let body = this.Statement();
+        this._eat('while');
+        this._eat('(');
+        let test = this.Expression();
+        this._eat(')');
+        this._eat(';');
+
+        return {
+            type: 'DoWhileStatement',
+            body,
+            test
         }
     }
 

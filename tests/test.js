@@ -5,10 +5,9 @@ const tokenizer = new Tokenizer();
 const parser = new Parser();
 
 const program = `
-while(true) {
-    hello;
-  }
-  
+do {
+    let a= 5;
+  }while(false);
 `
 
 console.log("==================================");
