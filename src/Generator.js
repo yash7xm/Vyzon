@@ -150,9 +150,22 @@ class Generator {
         return this.UnaryExpression(expression);
       case 'MemberExpression':
         return this.MemberExpression(expression);
+      case 'CallExpression':
+        return this.CallExpression(expression);
       default:
         return '';
     }
+  }
+
+  CallExpression(node) {
+    let calle = this.Expression(node.calle);
+    let argument = this.Arguments(node.arguments);
+
+    return `${calle}(${argument})`;
+  }
+
+  Arguments(node) {
+    return node.map((args) => this.Expression(args)).join(',');
   }
 
   MemberExpression(node) {

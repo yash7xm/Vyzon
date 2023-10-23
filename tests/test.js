@@ -8,7 +8,11 @@ const gen = new Generator();
 
 
 const program = `
-  a[0]+b.x;
+  sum(a = 5,b = 6);
+  def sum(a,b) {
+    console.log(a + b);
+    return (a + b);
+  }
 `;
 console.log("==================================");
 tokenizer.init(program);
