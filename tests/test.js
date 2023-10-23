@@ -7,10 +7,9 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
-  while(0) {
-    let a = 5;
-    a+=4;
-  }
+ do
+  0;
+ while(k);
 `
 
 console.log("==================================");

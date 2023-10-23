@@ -26,6 +26,8 @@ class Generator {
         return this.IfStatement(node);
       case 'WhileStatement':
         return this.WhileStatement(node);
+      case 'DoWhileStatement':
+        return this.DoWhileStatement(node);
       default:
         return '';
     }
@@ -68,6 +70,13 @@ class Generator {
     let body = this.Statement(node.body);
 
     return `while(${test}) {\n ${body} \n}`
+  }
+
+  DoWhileStatement(node) {
+    let body = this.Statement(node.body);
+    let test = this.Expression(node.test);
+
+    return `do {\n ${body} \n} \n while(${test});`;
   }
 
   ExpressionStatement(expression) {
