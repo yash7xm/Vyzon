@@ -8,11 +8,17 @@ const gen = new Generator();
 
 
 const program = `
-  sum(a = 5,b = 6);
-  def sum(a,b) {
-    console.log(a + b);
-    return (a + b);
+def greet(name, isMorning) {
+  if (isMorning) {
+      write("Good morning, " + name + "!");
+  } else {
+      write("Hello, " + name + "!");
   }
+}
+
+let userName = "John";
+let morning = false;
+greet(userName, morning);
 `;
 console.log("==================================");
 tokenizer.init(program);

@@ -161,6 +161,8 @@ class Generator {
     let calle = this.Expression(node.calle);
     let argument = this.Arguments(node.arguments);
 
+    if(calle === 'write') calle = 'console.log'
+
     return `${calle}(${argument})`;
   }
 
