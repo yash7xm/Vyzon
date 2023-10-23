@@ -7,9 +7,20 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
- do
-  0;
- while(k);
+ for(let i= 0; i<5 && i>0; i+=2){
+  i += 2;
+ }
+ while(0){
+  let b= 5;
+ }
+ for(let i,j=0; i<5 || j>3; i+=1){
+  while(0){
+    let x=5;
+  }
+ }
+ for(i=0; i<5; ){
+  yo;
+ }
 `
 
 console.log("==================================");

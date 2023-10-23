@@ -28,6 +28,8 @@ class Generator {
         return this.WhileStatement(node);
       case 'DoWhileStatement':
         return this.DoWhileStatement(node);
+      case 'ForStatement':
+        return this.ForStatement(node);
       default:
         return '';
     }
@@ -42,14 +44,14 @@ class Generator {
   }
 
   VariableStatement(declarations) {
-    return declarations.map((statement) => this.VariableDeclarations(statement)).join('\n');
+    return `let ` + declarations.map((statement) => this.VariableDeclarations(statement)).join(',') +`;`;
   }
 
   VariableDeclarations(node) {
     let id = node.id.name;
     let init = node.init !== null ? this.Expression(node.init) : 0;
 
-    return `let ${id} = ${init};`;
+    return `${id} = ${init}`;
   }
 
   IfStatement(node) {
@@ -77,6 +79,24 @@ class Generator {
     let test = this.Expression(node.test);
 
     return `do {\n ${body} \n} \n while(${test});`;
+  }
+
+  ForStatement(node) {
+    let init = this.InitForStatement(node.init);
+    let test = this.Expression(node.test);
+    let update = this.Expression(node.update);
+    let body = this.Statement(node.body);
+
+    return `for(${init} ${test}; ${update}){\n ${body} \n}`
+  }
+
+  InitForStatement(node) {
+    switch(node.type){
+      case ('VariableStatement'):
+        return this.VariableStatement(node.declarations);
+      default:
+        return this.Expression(node);
+    }
   }
 
   ExpressionStatement(expression) {
