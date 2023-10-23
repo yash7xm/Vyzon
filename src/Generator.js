@@ -30,13 +30,15 @@ class Generator {
         return this.DoWhileStatement(node);
       case 'ForStatement':
         return this.ForStatement(node);
+      case 'FunctionDeclatration':
+        return this.FunctionDeclatration(node);
       default:
         return '';
     }
   }
 
   BlockStatement(body) {
-    return '{\n' + this.StatementsList(body).join('\n') + '\n}';
+    return '\n' + this.StatementsList(body).join('\n') + '\n';
   }
 
   EmptyStatement() {
@@ -99,6 +101,18 @@ class Generator {
       default:
         return this.Expression(node);
     }
+  }
+
+  FunctionDeclatration(node) {
+    let name = this.Identifier(node.name);
+    let params = this.FunctionParamsList(node.params);
+    let body = this.BlockStatement(node.body.body);
+
+    return `function ${name} (${params}) {\n ${body} \n}`;
+  }
+
+  FunctionParamsList(params) {
+    return params.map((param) => this.Identifier(param)).join(',');
   }
 
   ExpressionStatement(expression) {
