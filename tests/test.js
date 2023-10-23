@@ -7,7 +7,7 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
- 1 + 2 * 3;
+ let a=0;
 `
 
 console.log("==================================");
@@ -25,7 +25,6 @@ let code = gen.generate(ast.body);
 
 console.log("==================================");
 console.log(code);
-code += 'console.log(1 + 2 * 3)'
 
 console.log("==================================");
 try {

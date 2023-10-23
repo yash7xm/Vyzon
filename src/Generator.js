@@ -18,6 +18,8 @@ class Generator {
         return this.ExpressionStatement(node.expression) + ';';
       case 'BlockStatement':
         return this.BlockStatement(node.body);
+      case 'VariableStatement':
+        return this.VariableStatement(node.declarations);
       default:
         return '';
     }
@@ -25,6 +27,17 @@ class Generator {
 
   BlockStatement(body) {
     return '{\n' + this.StatementsList(body).join('\n') + '\n}';
+  }
+
+  VariableStatement(declarations) {
+    return declarations.map((statement) => this.VariableDeclarations(statement)).join('\n');
+  }
+
+  VariableDeclarations(node) {
+    let id = node.id.name;
+    let init = node.init !== null ? this.Expression(node.init) : 0;
+
+    return `let ${id} = ${init};`;
   }
 
   ExpressionStatement(expression) {
