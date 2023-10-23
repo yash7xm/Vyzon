@@ -8,7 +8,8 @@ const gen = new Generator();
 
 const program = `
   def sum(a,b) {
-    return;
+    let sum = a+b;
+    return sum;
   }
 `
 
