@@ -20,6 +20,8 @@ class Generator {
         return this.BlockStatement(node.body);
       case 'VariableStatement':
         return this.VariableStatement(node.declarations);
+      case 'EmptyStatement':
+        return this.EmptyStatement();
       default:
         return '';
     }
@@ -27,6 +29,10 @@ class Generator {
 
   BlockStatement(body) {
     return '{\n' + this.StatementsList(body).join('\n') + '\n}';
+  }
+
+  EmptyStatement() {
+    return `;`;
   }
 
   VariableStatement(declarations) {

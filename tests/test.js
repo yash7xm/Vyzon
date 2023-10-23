@@ -7,7 +7,7 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
- let a=0;
+ ;
 `
 
 console.log("==================================");
