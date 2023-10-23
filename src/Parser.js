@@ -46,6 +46,8 @@ class Parser {
                 return this.FucntionDeclaration();
             case 'return':
                 return this.ReturnStatement();
+            case 'class':
+                return this.ClassDeclaration();
             case 'while':
             case 'do':
             case 'for':
@@ -307,6 +309,27 @@ class Parser {
         }
     }
 
+    ClassDeclaration() {
+        this._eat('class');
+        const id = this.Identifier();
+        
+        const superClass = this._lookahead.type === 'extends' ? this.ClassExtends() : null;
+
+        const body = this.BlockStatement();
+
+        return {
+            type: 'ClassDeclaration',
+            id,
+            superClass,
+            body
+        }
+    }
+
+    ClassExtends() {
+        this._eat('extends');
+        return this.Identifier();
+    }
+
     ExpressionStatement() {
         const expression = this.Expression();
         this._eat(';');
@@ -488,6 +511,10 @@ class Parser {
     }
 
     CallMemberExpression() {
+        if(this._lookahead.type === 'super'){
+            return this._CallExpression(this.Super());
+        }
+
         const member = this.MemberExpression();
 
         if(this._lookahead.type === '(') {
@@ -559,6 +586,29 @@ class Parser {
         return object;
     }
 
+    ThisExpression() {
+        this._eat('this');
+        return {
+            type: 'ThisExpression'
+        }
+    }
+
+    Super() {
+        this._eat('super');
+        return {
+            type: 'Super',
+        }
+    }
+
+    NewExpression() {
+        this._eat('new');
+        return {
+            type: 'NewExpression',
+            calle: this.MemberExpression(),
+            arguments: this.Arguments()
+        }
+    }
+
 
     ParethesizedExpression() {
         this._eat('(');
@@ -603,6 +653,10 @@ class Parser {
                 return this.Identifier();
             case ('('):
                 return this.ParethesizedExpression();
+            case ('this'):
+                return this.ThisExpression();
+            case ('new'):
+                return this.NewExpression();
             default:
                 throw new SyntaxError(`Unexpected Primary Expression`)
         }
