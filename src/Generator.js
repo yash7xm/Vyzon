@@ -87,6 +87,8 @@ class Generator {
     let update = this.Expression(node.update);
     let body = this.Statement(node.body);
 
+    if(init[init.length-1] != ';') init+=';'
+
     return `for(${init} ${test}; ${update}){\n ${body} \n}`
   }
 

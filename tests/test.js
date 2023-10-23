@@ -18,7 +18,7 @@ const program = `
     let x=5;
   }
  }
- for(i=0; i<5; ){
+ for(i=0; i<5; j+=2){
   yo;
  }
 `
