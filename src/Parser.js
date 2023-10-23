@@ -181,7 +181,7 @@ class Parser {
         alternate = this._lookahead != null ? this._CheckElifOrElseStatement() : null;
 
         return {
-            type: 'IfStatemnt',
+            type: 'IfStatement',
             test,
             consequent,
             alternate

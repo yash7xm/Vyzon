@@ -22,6 +22,8 @@ class Generator {
         return this.VariableStatement(node.declarations);
       case 'EmptyStatement':
         return this.EmptyStatement();
+      case 'IfStatement':
+        return this.IfStatement(node);
       default:
         return '';
     }
@@ -45,6 +47,19 @@ class Generator {
 
     return `let ${id} = ${init};`;
   }
+
+  IfStatement(node) {
+    let test = this.Expression(node.test);
+    let consequent = this.Statement(node.consequent);
+    let alternate = this.ElseStatement(node.alternate);
+    return `if (${test}) {\n  ${consequent}\n}${alternate}`;
+  }
+
+  ElseStatement(node) {
+    if(node == null) return '';
+    let alternate = this.Statement(node);
+    return `else ${alternate}`;
+  } 
 
   ExpressionStatement(expression) {
     return this.Expression(expression);
