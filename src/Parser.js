@@ -586,6 +586,26 @@ class Parser {
         return object;
     }
 
+    PrimaryExpression() {
+        if (this._isLiteral(this._lookahead.type)) {
+            return this.Literal();
+        }
+        switch (this._lookahead.type) {
+            case ('IDENTIFIER'):
+                return this.Identifier();
+            case ('('):
+                return this.ParethesizedExpression();
+            case ('this'):
+                return this.ThisExpression();
+            case ('new'):
+                return this.NewExpression();
+            default:
+                throw new SyntaxError(`Unexpected Primary Expression`)
+        }
+
+    }
+
+
     ThisExpression() {
         this._eat('this');
         return {
@@ -643,26 +663,6 @@ class Parser {
             name
         }
     }
-
-    PrimaryExpression() {
-        if (this._isLiteral(this._lookahead.type)) {
-            return this.Literal();
-        }
-        switch (this._lookahead.type) {
-            case ('IDENTIFIER'):
-                return this.Identifier();
-            case ('('):
-                return this.ParethesizedExpression();
-            case ('this'):
-                return this.ThisExpression();
-            case ('new'):
-                return this.NewExpression();
-            default:
-                throw new SyntaxError(`Unexpected Primary Expression`)
-        }
-
-    }
-
 
     _isLiteral(tokenType) {
         return tokenType === 'NUMBER' || tokenType === 'STRING' ||

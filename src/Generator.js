@@ -48,7 +48,7 @@ class Generator {
   }
 
   VariableStatement(declarations) {
-    return `let ` + declarations.map((statement) => this.VariableDeclarations(statement)).join(',') +`;`;
+    return `let ` + declarations.map((statement) => this.VariableDeclarations(statement)).join(',') + `;`;
   }
 
   VariableDeclarations(node) {
@@ -66,10 +66,10 @@ class Generator {
   }
 
   ElseStatement(node) {
-    if(node == null) return '';
+    if (node == null) return '';
     let alternate = this.Statement(node);
     return `else ${alternate}`;
-  } 
+  }
 
   WhileStatement(node) {
     let test = this.Expression(node.test);
@@ -91,13 +91,13 @@ class Generator {
     let update = node.update != null ? this.Expression(node.update) : '';
     let body = this.Statement(node.body);
 
-    if(init[init.length-1] != ';') init+=';'
+    if (init[init.length - 1] != ';') init += ';'
 
     return `for(${init} ${test}; ${update}){\n ${body} \n}`
   }
 
   InitForStatement(node) {
-    switch(node.type){
+    switch (node.type) {
       case ('VariableStatement'):
         return this.VariableStatement(node.declarations);
       default:
@@ -148,9 +148,25 @@ class Generator {
         return this.BinaryExpression(expression);
       case 'UnaryExpression':
         return this.UnaryExpression(expression);
+      case 'MemberExpression':
+        return this.MemberExpression(expression);
       default:
         return '';
     }
+  }
+
+  MemberExpression(node) {
+    let object = this.Expression(node.object);
+    let property = null;
+    if (node.computed) {
+      property = this.Expression(node.property);
+      return `${object}[${property}]`
+    }
+    else {
+      property = this.Identifier(node.property);
+      return `${object}.${property}`
+    }
+    
   }
 
   ConditionalExpression(node) {
