@@ -266,7 +266,7 @@ class Parser {
         if(this._lookahead.type === 'let'){
             return this.VariableStatementInit();
         }
-        return thhis.Expression();
+        return this.Expression();
     }
     
     FucntionDeclaration() {
