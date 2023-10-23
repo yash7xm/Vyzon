@@ -7,7 +7,19 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
-  
+  while(false) {
+    let j= 0;
+    if(j){
+      ths;
+    }
+    elif(0){
+      that;
+    }
+    else hi;
+    for(let i=0; i<4; i+=9){
+      heha;
+    }
+  }
 `
 
 console.log("==================================");

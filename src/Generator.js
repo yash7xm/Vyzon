@@ -111,6 +111,8 @@ class Generator {
         return this.NumericLiteral(expression);
       case 'StringLiteral':
         return this.StringLiteral(expression);
+      case 'BooleanLiteral':
+        return this.BooleanLiteral(expression);
       case 'Identifier':
         return this.Identifier(expression);
       case 'BinaryExpression':
@@ -124,7 +126,6 @@ class Generator {
         return this.BinaryExpression(expression);
       case 'UnaryExpression':
         return this.UnaryExpression(expression);
-      // Handle other expression types if needed.
       default:
         return '';
     }
@@ -163,6 +164,10 @@ class Generator {
 
   StringLiteral(node) {
     return `"${node.value}"`;
+  }
+
+  BooleanLiteral(node) {
+    return `${node.value}`;
   }
 
   Identifier(node) {
