@@ -24,6 +24,8 @@ class Generator {
         return this.EmptyStatement();
       case 'IfStatement':
         return this.IfStatement(node);
+      case 'WhileStatement':
+        return this.WhileStatement(node);
       default:
         return '';
     }
@@ -60,6 +62,13 @@ class Generator {
     let alternate = this.Statement(node);
     return `else ${alternate}`;
   } 
+
+  WhileStatement(node) {
+    let test = this.Expression(node.test);
+    let body = this.Statement(node.body);
+
+    return `while(${test}) {\n ${body} \n}`
+  }
 
   ExpressionStatement(expression) {
     return this.Expression(expression);

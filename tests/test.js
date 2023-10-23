@@ -7,12 +7,10 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
-let a = 5;
-if(a==5) {
-  a+=1;
-}
-else a-=1;
-
+  while(0) {
+    let a = 5;
+    a+=4;
+  }
 `
 
 console.log("==================================");
