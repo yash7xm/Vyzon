@@ -32,6 +32,8 @@ class Generator {
         return this.ForStatement(node);
       case 'FunctionDeclatration':
         return this.FunctionDeclatration(node);
+      case 'ReturnStatement':
+        return this.ReturnStatement(node.argument);
       default:
         return '';
     }
@@ -113,6 +115,12 @@ class Generator {
 
   FunctionParamsList(params) {
     return params.map((param) => this.Identifier(param)).join(',');
+  }
+
+  ReturnStatement(node) {
+    let argument = node != null ? this.Expression(node) : '';
+
+    return `return ${argument};`;
   }
 
   ExpressionStatement(expression) {

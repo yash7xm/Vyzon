@@ -7,8 +7,8 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
-  def sum(a,b){
-    sum = a + b;
+  def sum(a,b) {
+    return;
   }
 `
 
