@@ -82,9 +82,9 @@ class Generator {
   }
 
   ForStatement(node) {
-    let init = this.InitForStatement(node.init);
-    let test = this.Expression(node.test);
-    let update = this.Expression(node.update);
+    let init = node.init != null ? this.InitForStatement(node.init) : '';
+    let test = node.test != null ? this.Expression(node.test) : '';
+    let update = node.update != null ? this.Expression(node.update) : '';
     let body = this.Statement(node.body);
 
     if(init[init.length-1] != ';') init+=';'
