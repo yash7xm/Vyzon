@@ -484,7 +484,79 @@ class Parser {
     }
 
     LeftHandSideExpression() {
-        return this.PrimaryExpression();
+        return this.CallMemberExpression();
+    }
+
+    CallMemberExpression() {
+        const member = this.MemberExpression();
+
+        if(this._lookahead.type === '(') {
+            return this._CallExpression(member);
+        }
+
+        return member;
+    }
+
+    _CallExpression(calle) {
+        let callExpression = {
+            type: 'CallExpression',
+            calle,
+            arguments: this.Arguments()
+        }
+
+        if(this._lookahead.type === '(') {
+            callExpression = this._CallExpression(callExpression);
+        }
+
+        return callExpression;
+    }
+
+    Arguments() {
+        this._eat('(');
+        const argumentList = this._lookahead.type !== ')' ? this.ArgumentsList() : [];
+        this._eat(')');
+
+        return argumentList;
+    }
+
+    ArgumentsList() {
+        const argumentList = [];
+        do {
+            argumentList.push(this.AssignmentExpression());
+        }
+        while(this._lookahead.type === ',' && this._eat(','));
+
+        return argumentList;
+    }
+
+    MemberExpression() {
+        let object = this.PrimaryExpression();
+
+        while(this._lookahead.type === '.' || this._lookahead.type === '['){
+            if(this._lookahead.type === '.'){
+                this._eat('.');
+                const property = this.Identifier();
+                object = {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object,
+                    property
+                }
+            }
+            else {
+                this._eat('[');
+                const property = this.Expression();
+                this._eat(']');
+                object = {
+                    type: 'MemberExpression',
+                    computed: true,
+                    object,
+                    property
+                }
+            }
+        }
+
+        return object;
     }
 
 
@@ -507,7 +579,7 @@ class Parser {
     }
 
     _checkValidAssignmentTarget(node) {
-        if (node.type === 'Identifier') {
+        if (node.type === 'Identifier' || node.type === 'MemberExpression') {
             return node;
         }
 

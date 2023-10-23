@@ -7,10 +7,7 @@ const parser = new Parser();
 const gen = new Generator();
 
 const program = `
-  def sum(a,b) {
-    let sum = a+b;
-    return sum;
-  }
+  foo(a,b=10);
 `
 
 console.log("==================================");
