@@ -79,18 +79,26 @@ class Interpreter {
     BinaryExpression(node, env) {
         switch (node.operator) {
             case '+':
-                return this.AdditionExpression(node.left, node.right);
+            case '-':
             case '*':
-                return this.MultiplicationExpression(node.left, node.right);
+            case '/':
+                return this.MathExpression(node);
         }
     }
 
-    AdditionExpression(left, right) {
-        return this.Expression(left) + this.Expression(right);
-    }
-
-    MultiplicationExpression(left, right) {
-        return this.Expression(left) * this.Expression(right);
+    MathExpression(node) {
+        let left = node.left;
+        let right = node.right;
+        switch (node.operator) {
+            case '+':
+                return this.Expression(left) + this.Expression(right);
+            case '-':
+                return this.Expression(left) - this.Expression(right);
+            case '*':
+                return this.Expression(left) * this.Expression(right);
+            case '/':
+                return this.Expression(left) / this.Expression(right);
+        }
     }
 
     LogicalORExpression(node) {
@@ -111,7 +119,7 @@ class Interpreter {
         let argument = this.Expression(node.argument);
         let operator = node.operator;
 
-        switch(operator) {
+        switch (operator) {
             case '!':
                 return !argument;
             case '+':
