@@ -1,6 +1,4 @@
-const { type } = require('os');
 const Environment = require('./Environment.js');
-const env = new Environment({});
 
 class Interpreter {
 
@@ -12,137 +10,128 @@ class Interpreter {
         return this.StatementList(node);
     }
 
-    StatementList(body) {
-        return body.map((statement) => this.Statement(statement)).join('\n');
+    StatementList(body, env = this.global) {
+        return body.map((statement) => this.Statement(statement, env)).join('\n');
     }
 
-    Statement(node) {
+    Statement(node, env) {
         switch (node.type) {
             case 'ExpressionStatement':
-                return this.ExpressionStatement(node.expression);
+                return this.ExpressionStatement(node.expression, env);
             case 'VariableStatement':
-                return this.VaribaleStatement(node.declarations);
+                return this.VariableStatement(node.declarations, env);
+            case 'BlockStatement':
+                return this.BlockStatement(node.body, env);
         }
     }
 
-    VaribaleStatement(node) {
-        return node.map((declarations) => this.VariableDeclaration(declarations));
+    BlockStatement(node, env) {
+        return this.StatementList(node, env);
     }
 
-    VariableDeclaration(node) {
+    VariableStatement(node, env) {
+        return node.map((declaration) => this.VariableDeclaration(declaration, env));
+    }
+
+    VariableDeclaration(node, env) {
         let id = node.id.name;
-        let init = this.Expression(node.init);
-
-        this.global.define(id,init);
-        console.log(this.global);
-        
+        let init = this.Expression(node.init, env);
+        env.define(id, init);
+        console.log(env);
     }
 
-    ExpressionStatement(expression) {
-        return this.Expression(expression);
+    ExpressionStatement(expression, env) {
+        return this.Expression(expression, env);
     }
 
-    Expression(node) {
+    Expression(node, env) {
         switch (node.type) {
-            case ('NumericLiteral'):
+            case 'NumericLiteral':
                 return this.NumericLiteral(node);
-            case ('StringLiteral'):
+            case 'StringLiteral':
                 return this.StringLiteral(node);
-            case ('AssignmentExpression'):
-                return this.AssignmentExpression(node);
-            case ('BinaryExpression'):
-                return this.BinaryExpression(node);
+            case 'AssignmentExpression':
+                return this.AssignmentExpression(node, env);
+            case 'BinaryExpression':
+                return this.BinaryExpression(node, env);
         }
     }
 
-    AssignmentExpression(node) {
-
-        if(node.operator === '='){
-            return this.SimpleAssign(node);
-        }
-        else {
-            return this.ComplexAssign(node);
+    AssignmentExpression(node, env) {
+        if (node.operator === '=') {
+            return this.SimpleAssign(node, env);
+        } else {
+            return this.ComplexAssign(node, env);
         }
     }
 
-
-    BinaryExpression(node) {
+    BinaryExpression(node, env) {
         switch (node.operator) {
-            case ('+'):
+            case '+':
                 return this.AdditionExpression(node.left, node.right);
-        }
-        switch (node.operator) {
-            case ('*'):
-                return this.MultipicationExpression(node.left, node.right);
+            case '*':
+                return this.MultiplicationExpression(node.left, node.right);
         }
     }
 
     AdditionExpression(left, right) {
-        return ((this.Expression(left)) + (this.Expression(right)));
+        return this.Expression(left) + this.Expression(right);
     }
 
-    MultipicationExpression(left, right) {
-        return (this.Expression(left) * this.Expression(right));
-    }
-
-    NumericLiteral(node) {
-        return node.value;
+    MultiplicationExpression(left, right) {
+        return this.Expression(left) * this.Expression(right);
     }
 
     Identifier(node) {
         return node.name;
     }
 
+    NumericLiteral(node) {
+        return node.value;
+    }
+
     StringLiteral(node) {
         return node.value;
     }
 
-    SimpleAssign(node) {
+    SimpleAssign(node, env) {
         let left = this.Identifier(node.left);
-        let right = this.Expression(node.right);
-
-        this.global.lookup(left)
-           
-        this.global.assign(left, right);
-
-        console.log(this.global);
-
+        let right = this.Expression(node.right, env);
+        env.lookup(left);
+        env.assign(left, right);
+        console.log(env);
         return;
     }
 
-    ComplexAssign(node) {
+    ComplexAssign(node, env) {
         let left = this.Identifier(node.left);
-        let right = this.Expression(node.right);
+        let right = this.Expression(node.right, env);
         const operator = node.operator[0];
         console.log(typeof right);
+        const leftValue = env.lookup(left);
+        console.log(typeof leftValue);
 
-        const leftValue = this.global.lookup(left);
-
-        console.log(typeof leftValue)
-
-        if(typeof right === 'string' && typeof leftValue === 'string' && operator!='+') {
-            throw new SyntaxError('Kya kr ra h bhai');
+        if (typeof right === 'string' && typeof leftValue === 'string' && operator !== '+') {
+            throw new SyntaxError('Invalid operation');
         }
 
-       switch(operator) {
-        case ('+'):
-            right = leftValue + right;
-            break;
-        case ('-'):
-            right = leftValue - right;
-            break;
-        case ('*'):
-            right = leftValue * right;
-            break;
-        case ('/'):
-            right = leftValue / right;
-            break;
-       }
+        switch (operator) {
+            case '+':
+                right = leftValue + right;
+                break;
+            case '-':
+                right = leftValue - right;
+                break;
+            case '*':
+                right = leftValue * right;
+                break;
+            case '/':
+                right = leftValue / right;
+                break;
+        }
 
-        this.global.assign(left,right);
-
-        console.log(this.global);
-
+        env.assign(left, right);
+        console.log(env);
         return;
     }
 }
@@ -151,6 +140,6 @@ const GlobalEnvironment = new Environment({
     null: null,
     true: true,
     false: false,
-})
+});
 
 module.exports = { Interpreter };

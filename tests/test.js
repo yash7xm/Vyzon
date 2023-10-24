@@ -10,9 +10,11 @@ const interpreter = new Interpreter();
 
 
 const program = `
-   let a = 1;
-   a = 'a' + 'b';
-   a = 2;
+   
+    let a = 5 + 5;
+    a = 'a';
+    a += 'b';
+   
 `;
 console.log("==================================");
 tokenizer.init(program);
