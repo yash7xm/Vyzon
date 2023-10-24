@@ -1,3 +1,4 @@
+const { type } = require('os');
 const Environment = require('./Environment.js');
 const env = new Environment({});
 
@@ -43,12 +44,12 @@ class Interpreter {
 
     Expression(node) {
         switch (node.type) {
-            case 'NumericLiteral':
-                return this.NumericLiteral(node);
-            case 'AssignmentExpression':
-                return this.AssignmentExpression(node);
             case ('NumericLiteral'):
                 return this.NumericLiteral(node);
+            case ('StringLiteral'):
+                return this.StringLiteral(node);
+            case ('AssignmentExpression'):
+                return this.AssignmentExpression(node);
             case ('BinaryExpression'):
                 return this.BinaryExpression(node);
         }
@@ -92,6 +93,10 @@ class Interpreter {
         return node.name;
     }
 
+    StringLiteral(node) {
+        return node.value;
+    }
+
     SimpleAssign(node) {
         let left = this.Identifier(node.left);
         let right = this.Expression(node.right);
@@ -109,9 +114,15 @@ class Interpreter {
         let left = this.Identifier(node.left);
         let right = this.Expression(node.right);
         const operator = node.operator[0];
-        console.log(operator);
+        console.log(typeof right);
 
         const leftValue = this.global.lookup(left);
+
+        console.log(typeof leftValue)
+
+        if(typeof right === 'string' && typeof leftValue === 'string' && operator!='+') {
+            throw new SyntaxError('Kya kr ra h bhai');
+        }
 
        switch(operator) {
         case ('+'):
