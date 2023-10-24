@@ -26,7 +26,8 @@ class Interpreter {
     }
 
     BlockStatement(node, env) {
-        return this.StatementList(node, env);
+        const blockEnv = new Environment({}, env);
+        return this.StatementList(node, blockEnv);
     }
 
     VariableStatement(node, env) {
@@ -107,9 +108,7 @@ class Interpreter {
         let left = this.Identifier(node.left);
         let right = this.Expression(node.right, env);
         const operator = node.operator[0];
-        console.log(typeof right);
         const leftValue = env.lookup(left);
-        console.log(typeof leftValue);
 
         if (typeof right === 'string' && typeof leftValue === 'string' && operator !== '+') {
             throw new SyntaxError('Invalid operation');
