@@ -210,7 +210,7 @@ class Generator {
   UnaryExpression(node) {
     const operator = node.operator;
     const argument = this.Expression(node.argument);
-    return `${operator}${argument}`;
+    return `${operator}(${argument})`;
   }
 
   NumericLiteral(node) {

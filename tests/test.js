@@ -11,6 +11,8 @@ const interpreter = new Interpreter();
 
 const program = `
   let a = --1;  
+  a += 1;
+  write(a);
 `;
 console.log("==================================");
 tokenizer.init(program);
