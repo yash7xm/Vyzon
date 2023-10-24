@@ -51,6 +51,10 @@ class Interpreter {
                 return this.NumericLiteral(node);
             case 'StringLiteral':
                 return this.StringLiteral(node);
+            case 'BooleanLiteral':
+                return this.BooleanLiteral(node);
+            case 'NullLiteral':
+                return this.NullLiteral(node);
             case 'AssignmentExpression':
                 return this.AssignmentExpression(node, env);
             case 'BinaryExpression':
@@ -83,18 +87,6 @@ class Interpreter {
         return this.Expression(left) * this.Expression(right);
     }
 
-    Identifier(node) {
-        return node.name;
-    }
-
-    NumericLiteral(node) {
-        return node.value;
-    }
-
-    StringLiteral(node) {
-        return node.value;
-    }
-
     SimpleAssign(node, env) {
         let left = this.Identifier(node.left);
         let right = this.Expression(node.right, env);
@@ -103,6 +95,7 @@ class Interpreter {
         console.log(env);
         return;
     }
+
 
     ComplexAssign(node, env) {
         let left = this.Identifier(node.left);
@@ -132,6 +125,26 @@ class Interpreter {
         env.assign(left, right);
         console.log(env);
         return;
+    }
+
+    Identifier(node) {
+        return node.name;
+    }
+
+    NumericLiteral(node) {
+        return node.value;
+    }
+
+    StringLiteral(node) {
+        return node.value;
+    }
+
+    BooleanLiteral(node) {
+        return node.value;
+    }
+
+    NullLiteral(node) {
+        return node.value;
     }
 }
 

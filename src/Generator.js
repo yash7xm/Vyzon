@@ -135,6 +135,8 @@ class Generator {
         return this.StringLiteral(expression);
       case 'BooleanLiteral':
         return this.BooleanLiteral(expression);
+      case 'NullLiteral':
+        return this.NullLiteral(expression);
       case 'Identifier':
         return this.Identifier(expression);
       case 'BinaryExpression':
@@ -220,6 +222,10 @@ class Generator {
   }
 
   BooleanLiteral(node) {
+    return `${node.value}`;
+  }
+
+  NullLiteral(node) {
     return `${node.value}`;
   }
 
