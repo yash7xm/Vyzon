@@ -1,4 +1,10 @@
+const Environment = require('./Environment.js');
+
 class Interpreter {
+
+    constructor(global = GlobalEnvironment) {
+        this.global = global;
+    }
 
     interpret(node) {
         return this.StatementList(node);
@@ -18,7 +24,7 @@ class Interpreter {
     }
 
     VaribaleStatement(node) {
-        
+
     }
 
     ExpressionStatement(expression) {
@@ -65,6 +71,12 @@ class Interpreter {
     NumericLiteral(node) {
         return node.value;
     }
+
+    GlobalEnvironment = new Environment({
+        null: null,
+        true: true,
+        false: false,
+    })
 
 }
 

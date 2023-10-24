@@ -10,3 +10,5 @@
         return value;
     }
  }
+
+ module.exports = { Environment }
