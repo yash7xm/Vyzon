@@ -14,15 +14,6 @@ const program = `
    if(a > b) {
     a = 0;
    }
-   elif(a<b){
-    b=0;
-   }
-   else {
-    a=0;
-    b=0;
-    let c=0;
-
-   }
 `;
 console.log("==================================");
 tokenizer.init(program);

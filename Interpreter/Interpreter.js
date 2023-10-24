@@ -35,7 +35,7 @@ class Interpreter {
         } else if (node.alternate) {
             return this.Statement(node.alternate, env);
         } else {
-            return undefined; // No `alternate` provided, and `test` is false.
+            return undefined;
         }
     }
     
