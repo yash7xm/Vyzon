@@ -30,7 +30,7 @@ class Interpreter {
 
     VariableDeclaration(node) {
         let id = node.id.name;
-        let init = 1;
+        let init = this.Expression(node.init);
 
         this.global.define(id,init);
         console.log(this.global);
@@ -55,7 +55,12 @@ class Interpreter {
     }
 
     AssignmentExpression(node) {
-       
+        switch(node.operator) {
+            case ('='):
+                return this.SimpleAssign(node);
+            case ('+='):
+                return this.ComplexPlusAssign(node);
+        }
     }
 
 
@@ -80,6 +85,23 @@ class Interpreter {
 
     NumericLiteral(node) {
         return node.value;
+    }
+
+    Identifier(node) {
+        return node.name;
+    }
+
+    SimpleAssign(node) {
+        let left = this.Identifier(node.left);
+        let right = this.Expression(node.right);
+
+        this.global.lookup(left)
+           
+        this.global.assign(left, right);
+        
+        console.log(this.global);
+
+        return (left = right);
     }
 }
 
