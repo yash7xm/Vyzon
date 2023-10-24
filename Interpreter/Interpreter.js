@@ -55,6 +55,10 @@ class Interpreter {
                 return this.BooleanLiteral(node);
             case 'NullLiteral':
                 return this.NullLiteral(node);
+            case 'LogicalORExpression':
+                return this.LogicalORExpression(node);
+            case 'LogicalANDExpression':
+                return this.LogicalANDExpression(node);
             case 'AssignmentExpression':
                 return this.AssignmentExpression(node, env);
             case 'BinaryExpression':
@@ -85,6 +89,20 @@ class Interpreter {
 
     MultiplicationExpression(left, right) {
         return this.Expression(left) * this.Expression(right);
+    }
+
+    LogicalORExpression(node) {
+        let left = this.Expression(node.left);
+        let right = this.Expression(node.right);
+
+        return (left || right);
+    }
+
+    LogicalANDExpression(node) {
+        let left = this.Expression(node.left);
+        let right = this.Expression(node.right);
+
+        return (left && right);
     }
 
     SimpleAssign(node, env) {
