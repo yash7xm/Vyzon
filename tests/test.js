@@ -10,12 +10,18 @@ const interpreter = new Interpreter();
 
 
 const program = `
-   let a = 5, b= 1;
+   let a = 1, b= 1;
    if(a > b) {
     a = 0;
    }
+   elif(a<b){
+    b=0;
+   }
    else {
-    b = 0;
+    a=0;
+    b=0;
+    let c=0;
+
    }
 `;
 console.log("==================================");

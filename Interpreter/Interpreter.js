@@ -29,14 +29,16 @@ class Interpreter {
 
     IfStatement(node, env) {
         let test = this.Expression(node.test, env);
-        console.log(test);
-        let consequent = this.Statement(node.consequent, env);
-        console.log(consequent);
-        let alternate = node.alternate != null ? this.Statement(node.alternate, env) : '';
-        console.log(alternate);
-
-        return test?consequent:alternate;
+    
+        if (test) {
+            return this.Statement(node.consequent, env);
+        } else if (node.alternate) {
+            return this.Statement(node.alternate, env);
+        } else {
+            return undefined; // No `alternate` provided, and `test` is false.
+        }
     }
+    
 
     BlockStatement(node, env) {
         const blockEnv = new Environment({}, env);
@@ -101,7 +103,6 @@ class Interpreter {
             case '==':
             case '>':
             case '<':
-            case '>':
             case '>=':
             case '<=':
                 return this.RealationalExpression(node, env);
