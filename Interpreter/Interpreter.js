@@ -1,4 +1,5 @@
 const Environment = require('./Environment.js');
+const env = new Environment({});
 
 class Interpreter {
 
@@ -19,12 +20,21 @@ class Interpreter {
             case 'ExpressionStatement':
                 return this.ExpressionStatement(node.expression);
             case 'VariableStatement':
-                return VaribaleStatement(node);
+                return this.VaribaleStatement(node.declarations);
         }
     }
 
     VaribaleStatement(node) {
+        return node.map((declarations) => this.VariableDeclaration(declarations));
+    }
 
+    VariableDeclaration(node) {
+        let id = node.id.name;
+        let init = 1;
+
+        this.global.define(id,init);
+        console.log(this.global);
+        
     }
 
     ExpressionStatement(expression) {
@@ -71,13 +81,12 @@ class Interpreter {
     NumericLiteral(node) {
         return node.value;
     }
-
-    GlobalEnvironment = new Environment({
-        null: null,
-        true: true,
-        false: false,
-    })
-
 }
+
+const GlobalEnvironment = new Environment({
+    null: null,
+    true: true,
+    false: false,
+})
 
 module.exports = { Interpreter };

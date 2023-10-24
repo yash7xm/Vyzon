@@ -2,7 +2,7 @@
 
     constructor(record = {}, parent = null) {
         this.record = record;
-        this.parent = parent
+        this.parent = parent;
     }
 
     define(name, value) {
@@ -11,4 +11,4 @@
     }
  }
 
- module.exports = { Environment }
+ module.exports = Environment;
