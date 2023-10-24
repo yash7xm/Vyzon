@@ -55,11 +55,12 @@ class Interpreter {
     }
 
     AssignmentExpression(node) {
-        switch(node.operator) {
-            case ('='):
-                return this.SimpleAssign(node);
-            case ('+='):
-                return this.ComplexPlusAssign(node);
+
+        if(node.operator === '='){
+            return this.SimpleAssign(node);
+        }
+        else {
+            return this.ComplexAssign(node);
         }
     }
 
@@ -98,10 +99,40 @@ class Interpreter {
         this.global.lookup(left)
            
         this.global.assign(left, right);
-        
+
         console.log(this.global);
 
-        return (left = right);
+        return;
+    }
+
+    ComplexAssign(node) {
+        let left = this.Identifier(node.left);
+        let right = this.Expression(node.right);
+        const operator = node.operator[0];
+        console.log(operator);
+
+        const leftValue = this.global.lookup(left);
+
+       switch(operator) {
+        case ('+'):
+            right = leftValue + right;
+            break;
+        case ('-'):
+            right = leftValue - right;
+            break;
+        case ('*'):
+            right = leftValue * right;
+            break;
+        case ('/'):
+            right = leftValue / right;
+            break;
+       }
+
+        this.global.assign(left,right);
+
+        console.log(this.global);
+
+        return;
     }
 }
 
