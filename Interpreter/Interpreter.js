@@ -59,6 +59,8 @@ class Interpreter {
                 return this.LogicalORExpression(node);
             case 'LogicalANDExpression':
                 return this.LogicalANDExpression(node);
+            case 'UnaryExpression':
+                return this.UnaryExpression(node);
             case 'AssignmentExpression':
                 return this.AssignmentExpression(node, env);
             case 'BinaryExpression':
@@ -103,6 +105,20 @@ class Interpreter {
         let right = this.Expression(node.right);
 
         return (left && right);
+    }
+
+    UnaryExpression(node) {
+        let argument = this.Expression(node.argument);
+        let operator = node.operator;
+
+        switch(operator) {
+            case '!':
+                return !argument;
+            case '+':
+                return +argument;
+            case '-':
+                return -argument;
+        }
     }
 
     SimpleAssign(node, env) {

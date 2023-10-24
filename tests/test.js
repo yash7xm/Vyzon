@@ -10,7 +10,7 @@ const interpreter = new Interpreter();
 
 
 const program = `
-  let r = true && true;   
+  let a = --1;  
 `;
 console.log("==================================");
 tokenizer.init(program);
