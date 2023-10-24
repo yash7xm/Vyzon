@@ -68,7 +68,7 @@ class Generator {
   ElseStatement(node) {
     if (node == null) return '';
     let alternate = this.Statement(node);
-    return `else ${alternate}`;
+    return `else {${alternate}}`;
   }
 
   WhileStatement(node) {

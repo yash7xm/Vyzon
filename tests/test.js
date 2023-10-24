@@ -10,7 +10,13 @@ const interpreter = new Interpreter();
 
 
 const program = `
-   
+   let a = 5, b= 1;
+   if(a > b) {
+    a = 0;
+   }
+   else {
+    b = 0;
+   }
 `;
 console.log("==================================");
 tokenizer.init(program);

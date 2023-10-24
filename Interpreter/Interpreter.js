@@ -22,7 +22,20 @@ class Interpreter {
                 return this.VariableStatement(node.declarations, env);
             case 'BlockStatement':
                 return this.BlockStatement(node.body, env);
+            case 'IfStatement':
+                return this.IfStatement(node, env);
         }
+    }
+
+    IfStatement(node, env) {
+        let test = this.Expression(node.test, env);
+        console.log(test);
+        let consequent = this.Statement(node.consequent, env);
+        console.log(consequent);
+        let alternate = node.alternate != null ? this.Statement(node.alternate, env) : '';
+        console.log(alternate);
+
+        return test?consequent:alternate;
     }
 
     BlockStatement(node, env) {
@@ -55,6 +68,8 @@ class Interpreter {
                 return this.BooleanLiteral(node);
             case 'NullLiteral':
                 return this.NullLiteral(node);
+            case 'Identifier':
+                return this.Identifier(node, env);
             case 'LogicalORExpression':
                 return this.LogicalORExpression(node);
             case 'LogicalANDExpression':
@@ -82,46 +97,54 @@ class Interpreter {
             case '-':
             case '*':
             case '/':
-                return this.MathExpression(node);
+                return this.MathExpression(node, env);
             case '==':
             case '>':
             case '<':
             case '>':
             case '>=':
             case '<=':
-                return this.RealationalExpression(node);
+                return this.RealationalExpression(node, env);
         }
     }
 
-    MathExpression(node) {
-        let left = node.left;
-        let right = node.right;
+    MathExpression(node, env) {
+        let left = this.Expression(node.left);
+        let right = this.Expression(node.right);
+
+        left = env.lookup(left);
+        right = env.lookup(right);
         switch (node.operator) {
             case '+':
-                return this.Expression(left) + this.Expression(right);
+                return left + right;
             case '-':
-                return this.Expression(left) - this.Expression(right);
+                return left - right;
             case '*':
-                return this.Expression(left) * this.Expression(right);
+                return left * right;
             case '/':
-                return this.Expression(left) / this.Expression(right);
+                return left / right;
         }
     }
 
-    RealationalExpression(node) {
-        let left = node.left;
-        let right = node.right;
+    RealationalExpression(node, env) {
+        let left = this.Expression(node.left);
+        let right = this.Expression(node.right);
+
+        left = env.lookup(left);
+        right = env.lookup(right);
+
+        console.log(left, right);
         switch (node.operator) {
             case '==':
-                return this.Expression(left) == this.Expression(right);
+                return left == right;
             case '>':
-                return this.Expression(left) > this.Expression(right);
+                return left > right;
             case '>=':
-                return this.Expression(left) >= this.Expression(right);
+                return left >= right;
             case '<':
-                return this.Expression(left) < this.Expression(right);
+                return left < right;
             case '<=':
-                return this.Expression(left) <= this.Expression(right);
+                return left <= right;
         }
     }
 
@@ -194,7 +217,7 @@ class Interpreter {
     }
 
     Identifier(node) {
-        return node.name;
+        return (node.name);
     }
 
     NumericLiteral(node) {
