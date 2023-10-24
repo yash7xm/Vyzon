@@ -83,6 +83,13 @@ class Interpreter {
             case '*':
             case '/':
                 return this.MathExpression(node);
+            case '==':
+            case '>':
+            case '<':
+            case '>':
+            case '>=':
+            case '<=':
+                return this.RealationalExpression(node);
         }
     }
 
@@ -98,6 +105,23 @@ class Interpreter {
                 return this.Expression(left) * this.Expression(right);
             case '/':
                 return this.Expression(left) / this.Expression(right);
+        }
+    }
+
+    RealationalExpression(node) {
+        let left = node.left;
+        let right = node.right;
+        switch (node.operator) {
+            case '==':
+                return this.Expression(left) == this.Expression(right);
+            case '>':
+                return this.Expression(left) > this.Expression(right);
+            case '>=':
+                return this.Expression(left) >= this.Expression(right);
+            case '<':
+                return this.Expression(left) < this.Expression(right);
+            case '<=':
+                return this.Expression(left) <= this.Expression(right);
         }
     }
 

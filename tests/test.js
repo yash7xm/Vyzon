@@ -10,12 +10,7 @@ const interpreter = new Interpreter();
 
 
 const program = `
-   let a = 1 - 4 / 2 + 1;
-   a += 2;
-   {
-    let c = 5;
-    a = 1;
-   }
+   
 `;
 console.log("==================================");
 tokenizer.init(program);
