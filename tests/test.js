@@ -1,24 +1,16 @@
 const { Tokenizer } = require('../src/Tokenizer.js');
 const { Parser } = require('../src/Parser.js');
 const { Generator } = require('../src/Generator.js');
+const { Interpreter } = require('../Interpreter/Interpreter.js');
 
 const tokenizer = new Tokenizer();
 const parser = new Parser();
 const gen = new Generator();
+const interpreter = new Interpreter();
 
 
 const program = `
-def greet(name, isMorning) {
-  if (isMorning) {
-      write("Good morning, " + name + "!");
-  } else {
-      write("Hello, " + name + "!");
-  }
-}
-
-let userName = "John";
-let morning = false;
-greet(userName, morning);
+  1 + 2 + 2;
 `;
 console.log("==================================");
 tokenizer.init(program);
@@ -43,4 +35,6 @@ try {
   console.error("Error running the generated code:", error);
 }
 
+const ev = interpreter.interpret(ast.body);
+console.log(ev);
 
