@@ -10,12 +10,15 @@ const interpreter = new Interpreter();
 
 
 const program = `
-let a = 0, b= 2;
-  def sum(a) {
-    let c = 0;
-    a = a + 2;
+  let a = 6, b=0;
+  for(let i=0; i<5; i+=1){
+    if(a>b) write('a is greater');
+    elif(a<b) write('b is greater');
+    else write('dono barabar h');
+    a -=1;
+    b +=1;
   }
-  sum(a,b);
+
 `;
 console.log("==================================");
 tokenizer.init(program);
@@ -39,6 +42,9 @@ try {
 } catch (error) {
   console.error("Error running the generated code:", error);
 }
+
+
+console.log("==================================");
 
 const ev = interpreter.interpret(ast.body);
 console.log(ev);

@@ -43,7 +43,7 @@ class Interpreter {
         }
 
         env.define(name, customFunction);
-        console.log(env);
+        // console.log(env);
 
     }
 
@@ -51,10 +51,11 @@ class Interpreter {
 
     ForStatement(node, env) {
         let result;
-        for (this.Statement(node.init, env); this.Expression(node.test, env); this.Expression(node.update, env)) {
-            result = this.Statement(node.body, env);
+        this.Statement(node.init, env);
+        while (this.Expression(node.test, env)) {
+            result = this.StatementList(node.body, env);
+            this.Expression(node.update, env);
         }
-
         return result;
     }
 
@@ -103,7 +104,7 @@ class Interpreter {
         let id = node.id.name;
         let init = this.Expression(node.init, env);
         env.define(id, init);
-        console.log(env);
+        // console.log(env);
     }
 
     ExpressionStatement(expression, env) {
@@ -140,20 +141,35 @@ class Interpreter {
     CallExpression(node, env) {
         let calle = node.calle.name;
 
-        let argument = [];
-        for (let i = 0; i < node.arguments.length; i++) {
-            argument.push(node.arguments[i].name);
-        }
+       
+        
+        let argument = this.ArgumentList(node.arguments, env);
 
-        argument = argument.join(',');
+        if(calle === 'write') {
+            console.log(argument);
+            return;
+        }
 
 
         const calledFunction = env.lookup(calle);
 
-        console.log(calledFunction({ [arguments]: 10 }));
-        console.log(env);
+        (calledFunction({ [argument]: 10 }));
+        // console.log(env);
 
     }
+
+    ArgumentList(argument, env) {
+        let argumentList = [];
+
+        for(let i=0; i<argument.length; i++){
+            argumentList.push(this.Expression(argument[i], env));
+        }
+
+        argumentList = argumentList.join(',');
+
+        return argumentList;
+    }
+
 
     AssignmentExpression(node, env) {
         if (node.operator === '=') {
@@ -202,7 +218,7 @@ class Interpreter {
         // left = env.lookup(left);
         // right = env.lookup(right);
 
-        console.log(left, right);
+        // console.log(left, right);
         switch (node.operator) {
             case '==':
                 return left == right;
@@ -250,7 +266,7 @@ class Interpreter {
         let right = this.Expression(node.right, env);
         env.lookup(left);
         env.assign(left, right);
-        console.log(env);
+        // console.log(env);
         return;
     }
 
@@ -281,7 +297,7 @@ class Interpreter {
         }
 
         env.assign(left, right);
-        console.log(env);
+        // console.log(env);
         return;
     }
 
