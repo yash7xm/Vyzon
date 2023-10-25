@@ -10,9 +10,9 @@ const interpreter = new Interpreter();
 
 
 const program = `
-   let a = 1, b= 1;
-   if(a > b) {
-    a = 0;
+let a = 0;;
+   while(a < 10){
+    a+=1;
    }
 `;
 console.log("==================================");

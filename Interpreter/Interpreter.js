@@ -24,7 +24,19 @@ class Interpreter {
                 return this.BlockStatement(node.body, env);
             case 'IfStatement':
                 return this.IfStatement(node, env);
+            case 'WhileStatement':
+                return this.WhileStatement(node, env);
         }
+    }
+
+    WhileStatement(node, env) {
+        let result;
+
+        while(this.Expression(node.test, env)){
+          result =   this.Statement(node.body, env);
+        }
+
+        return result;
     }
 
     IfStatement(node, env) {
@@ -110,11 +122,9 @@ class Interpreter {
     }
 
     MathExpression(node, env) {
-        let left = this.Expression(node.left);
-        let right = this.Expression(node.right);
+        let left = this.Expression(node.left, env);
+        let right = this.Expression(node.right, env);
 
-        left = env.lookup(left);
-        right = env.lookup(right);
         switch (node.operator) {
             case '+':
                 return left + right;
@@ -128,11 +138,11 @@ class Interpreter {
     }
 
     RealationalExpression(node, env) {
-        let left = this.Expression(node.left);
-        let right = this.Expression(node.right);
+        let left = this.Expression(node.left, env);
+        let right = this.Expression(node.right, env);
 
-        left = env.lookup(left);
-        right = env.lookup(right);
+        // left = env.lookup(left);
+        // right = env.lookup(right);
 
         console.log(left, right);
         switch (node.operator) {
@@ -178,7 +188,7 @@ class Interpreter {
     }
 
     SimpleAssign(node, env) {
-        let left = this.Identifier(node.left);
+        let left = node.left.name;
         let right = this.Expression(node.right, env);
         env.lookup(left);
         env.assign(left, right);
@@ -188,7 +198,7 @@ class Interpreter {
 
 
     ComplexAssign(node, env) {
-        let left = this.Identifier(node.left);
+        let left = node.left.name;
         let right = this.Expression(node.right, env);
         const operator = node.operator[0];
         const leftValue = env.lookup(left);
@@ -217,8 +227,8 @@ class Interpreter {
         return;
     }
 
-    Identifier(node) {
-        return (node.name);
+    Identifier(node, env) {
+        return env.lookup(node.name);
     }
 
     NumericLiteral(node) {
