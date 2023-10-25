@@ -10,11 +10,10 @@ const interpreter = new Interpreter();
 
 
 const program = `
-let a = 0;
-  do{
-    a += 1;
-  }while(a<10);
-   
+let a = 0, i=10;
+ for(i=0; i<=10; i+=1){
+  a+=1;
+ }
 `;
 console.log("==================================");
 tokenizer.init(program);

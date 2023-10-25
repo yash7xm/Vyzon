@@ -28,7 +28,18 @@ class Interpreter {
                 return this.WhileStatement(node, env);
             case 'DoWhileStatement':
                 return this.DoWhileStatement(node, env);
+            case 'ForStatement':
+                return this.ForStatement(node, env);
         }
+    }
+
+    ForStatement(node, env) {
+        let result;
+        for(this.Statement(node.init, env); this.Expression(node.test, env); this.Expression(node.update, env)){
+            result = this.Statement(node.body, env);
+        }
+
+        return result;
     }
 
     DoWhileStatement(node, env) {
