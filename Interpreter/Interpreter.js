@@ -138,6 +138,8 @@ class Interpreter {
                 return this.AssignmentExpression(node, env);
             case 'ConditionalExpression':
                 return this.ConditionalExpression(node, env);
+            case 'MemberExpression':
+                return this.MemberExpression(node, env);
             case 'BinaryExpression':
                 return this.BinaryExpression(node, env);
             case 'CallExpression':
@@ -170,12 +172,23 @@ class Interpreter {
         return console.log(...args);
     }
 
+    MemberExpression(node, env) {
+        let object = this.Identifier(node.object, env);
+        
+        if(node.computed) {
+            return object[this.Expression(node.property, env)];
+        }
+        else {
+            let property = node.property.name;
+            return object[property];
+        }
+    }
+
     ConditionalExpression(node, env) {
         return this.Expression(node.test, env) ? 
                 this.Expression(node.consequent, env) :
                 this.Expression(node.alternate, env);
     }
-
 
     AssignmentExpression(node, env) {
         if (node.operator === '=') {

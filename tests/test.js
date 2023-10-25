@@ -10,10 +10,9 @@ const interpreter = new Interpreter();
 
 
 const program = `
-let a = 5,b;
-
-a = a > b? 10 : 100;
-write(a);
+let a = 'yash';
+write(a.length);
+write(a[5]);
 
 `;
 console.log("==================================");
