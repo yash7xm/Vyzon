@@ -30,8 +30,37 @@ class Interpreter {
                 return this.DoWhileStatement(node, env);
             case 'ForStatement':
                 return this.ForStatement(node, env);
+            case 'FunctionDeclatration':
+                return this.FunctionDeclaration(node, env);
         }
     }
+  FunctionDeclaration(node, env) {
+    let name = node.name.name;
+
+    let params = [];
+    for (let i = 0; i < node.params.length; i++) {
+        params.push(node.params[i].name);
+    }
+
+    params = params.join(',');
+    console.log(params);
+
+    const customFunction = (args) => {
+        const functionEnv = new Environment({ ...env.record, ...args }, env);
+        return this.Statement(node.body, functionEnv);
+    }
+
+    env.define(name, customFunction);
+    console.log(env);
+
+    const sum = env.lookup(name);
+
+    const k = 10;
+    console.log(sum({ [params]: k }));
+    console.log(env);
+}
+
+    
 
     ForStatement(node, env) {
         let result;
