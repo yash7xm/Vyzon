@@ -10,14 +10,15 @@ const interpreter = new Interpreter();
 
 
 const program = `
-def add(a, b) {
-  return a + b;
+let n = 5;
+
+for (let i = 1; i <= n; i+=1) {
+    let row = '';
+    for (let j = 1; j <= i; j+=1) {
+        row = row + '* ';
+    }
+    write(row);
 }
-
-let result = add(3, 4);
-
-write(result);
-
 
 `;
 console.log("==================================");
@@ -47,5 +48,5 @@ try {
 console.log("==================================");
 
 const ev = interpreter.interpret(ast.body);
-console.log(ev);
+
 
