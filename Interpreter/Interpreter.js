@@ -85,8 +85,8 @@ class Interpreter {
     }
 
     IfStatement(node, env) {
-        let test = this.Expression(node.test, env);
-
+        const test = this.Expression(node.test, env);
+    
         if (test) {
             return this.Statement(node.consequent, env);
         } else if (node.alternate) {
@@ -95,6 +95,7 @@ class Interpreter {
             return undefined;
         }
     }
+    
 
 
     BlockStatement(node, env) {
@@ -129,11 +130,11 @@ class Interpreter {
             case 'Identifier':
                 return this.Identifier(node, env);
             case 'LogicalORExpression':
-                return this.LogicalORExpression(node);
+                return this.LogicalORExpression(node, env);
             case 'LogicalANDExpression':
-                return this.LogicalANDExpression(node);
+                return this.LogicalANDExpression(node, env);
             case 'UnaryExpression':
-                return this.UnaryExpression(node);
+                return this.UnaryExpression(node, env);
             case 'AssignmentExpression':
                 return this.AssignmentExpression(node, env);
             case 'ConditionalExpression':
@@ -249,22 +250,22 @@ class Interpreter {
         }
     }
 
-    LogicalORExpression(node) {
-        let left = this.Expression(node.left);
-        let right = this.Expression(node.right);
+    LogicalORExpression(node, env) {
+        let left = this.Expression(node.left, env);
+        let right = this.Expression(node.right, env);
 
         return (left || right);
     }
 
-    LogicalANDExpression(node) {
-        let left = this.Expression(node.left);
-        let right = this.Expression(node.right);
+    LogicalANDExpression(node, env) {
+        let left = this.Expression(node.left, env);
+        let right = this.Expression(node.right, env);
 
         return (left && right);
     }
 
-    UnaryExpression(node) {
-        let argument = this.Expression(node.argument);
+    UnaryExpression(node, env) {
+        let argument = this.Expression(node.argument, env);
         let operator = node.operator;
 
         switch (operator) {
@@ -279,7 +280,7 @@ class Interpreter {
 
     SimpleAssign(node, env) {
         let left = node.left.name;
-        let right = node.right !== null ? this.Expression(node.right, env) : 0;
+        let right = node.right !== null ? this.Expression(node.right, env) : null;
         env.lookup(left);
         env.assign(left, right);
         // console.log(env);

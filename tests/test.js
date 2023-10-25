@@ -10,9 +10,45 @@ const interpreter = new Interpreter();
 
 
 const program = `
-let a = 'yash';
-write(a.length);
-write(a[5]);
+def isDivisible(n, divisor) {
+  while (n >= divisor) {
+      n = n - divisor;
+  }
+  return n == 0;
+}
+
+def isPrime(n) {
+  if (n <= 1) {
+      return false;
+  }
+  if (n <= 3) {
+      return true;
+  }
+  if (isDivisible(n, 2) || isDivisible(n, 3)) {
+      return false;
+  }
+  let i = 5;
+  while (i * i <= n) {
+      if (isDivisible(n, i) || isDivisible(n, i + 2)) {
+          return false;
+      }
+      i = i + 6;
+  }
+  return true;
+}
+
+def findPrimes(limit) {
+  
+  for (let num = 2; num <= limit; num+=1) {
+      if (isPrime(num)) {
+        write(num);
+      }
+  }
+
+}
+
+findPrimes(30);
+write('true');
 
 `;
 console.log("==================================");
