@@ -34,37 +34,24 @@ class Interpreter {
                 return this.FunctionDeclaration(node, env);
         }
     }
-  FunctionDeclaration(node, env) {
-    let name = node.name.name;
+    FunctionDeclaration(node, env) {
+        let name = node.name.name;
 
-    let params = [];
-    for (let i = 0; i < node.params.length; i++) {
-        params.push(node.params[i].name);
+        const customFunction = (args) => {
+            const functionEnv = new Environment({ ...env.record, ...args }, env);
+            return this.Statement(node.body, functionEnv);
+        }
+
+        env.define(name, customFunction);
+        console.log(env);
+
     }
 
-    params = params.join(',');
-    console.log(params);
 
-    const customFunction = (args) => {
-        const functionEnv = new Environment({ ...env.record, ...args }, env);
-        return this.Statement(node.body, functionEnv);
-    }
-
-    env.define(name, customFunction);
-    console.log(env);
-
-    const sum = env.lookup(name);
-
-    const k = 10;
-    console.log(sum({ [params]: k }));
-    console.log(env);
-}
-
-    
 
     ForStatement(node, env) {
         let result;
-        for(this.Statement(node.init, env); this.Expression(node.test, env); this.Expression(node.update, env)){
+        for (this.Statement(node.init, env); this.Expression(node.test, env); this.Expression(node.update, env)) {
             result = this.Statement(node.body, env);
         }
 
@@ -73,18 +60,18 @@ class Interpreter {
 
     DoWhileStatement(node, env) {
         let result;
-        do{
+        do {
             result = this.Statement(node.body, env);
         }
-        while(this.Expression(node.test, env));
+        while (this.Expression(node.test, env));
         return result;
     }
 
     WhileStatement(node, env) {
         let result;
 
-        while(this.Expression(node.test, env)){
-          result =   this.Statement(node.body, env);
+        while (this.Expression(node.test, env)) {
+            result = this.Statement(node.body, env);
         }
 
         return result;
@@ -92,7 +79,7 @@ class Interpreter {
 
     IfStatement(node, env) {
         let test = this.Expression(node.test, env);
-    
+
         if (test) {
             return this.Statement(node.consequent, env);
         } else if (node.alternate) {
@@ -101,7 +88,7 @@ class Interpreter {
             return undefined;
         }
     }
-    
+
 
     BlockStatement(node, env) {
         const blockEnv = new Environment({}, env);
@@ -145,7 +132,27 @@ class Interpreter {
                 return this.AssignmentExpression(node, env);
             case 'BinaryExpression':
                 return this.BinaryExpression(node, env);
+            case 'CallExpression':
+                return this.CallExpression(node, env);
         }
+    }
+
+    CallExpression(node, env) {
+        let calle = node.calle.name;
+
+        let argument = [];
+        for (let i = 0; i < node.arguments.length; i++) {
+            argument.push(node.arguments[i].name);
+        }
+
+        argument = argument.join(',');
+
+
+        const calledFunction = env.lookup(calle);
+
+        console.log(calledFunction({ [arguments]: 10 }));
+        console.log(env);
+
     }
 
     AssignmentExpression(node, env) {

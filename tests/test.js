@@ -10,11 +10,12 @@ const interpreter = new Interpreter();
 
 
 const program = `
-let a = 1;
+let a = 0, b= 2;
   def sum(a) {
-    let s  = a + 1;
+    let c = 0;
+    a = a + 2;
   }
-  sum(a);
+  sum(a,b);
 `;
 console.log("==================================");
 tokenizer.init(program);
