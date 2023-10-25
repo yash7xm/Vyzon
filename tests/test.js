@@ -10,14 +10,14 @@ const interpreter = new Interpreter();
 
 
 const program = `
-  let a = 6, b=0;
-  for(let i=0; i<5; i+=1){
-    if(a>b) write('a is greater');
-    elif(a<b) write('b is greater');
-    else write('dono barabar h');
-    a -=1;
-    b +=1;
-  }
+def add(a, b) {
+  return a + b;
+}
+
+let result = add(3, 4);
+
+write(result);
+
 
 `;
 console.log("==================================");

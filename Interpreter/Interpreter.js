@@ -32,19 +32,26 @@ class Interpreter {
                 return this.ForStatement(node, env);
             case 'FunctionDeclatration':
                 return this.FunctionDeclaration(node, env);
+            case 'ReturnStatement':
+                return this.ReturnStatement(node, env);
         }
     }
     FunctionDeclaration(node, env) {
         let name = node.name.name;
 
-        const customFunction = (args) => {
-            const functionEnv = new Environment({ ...env.record, ...args }, env);
-            return this.Statement(node.body, functionEnv);
+        let functionBody = {
+            name: node.name.name,
+            params: node.params,
+            body: node.body,
+            env
         }
 
-        env.define(name, customFunction);
-        // console.log(env);
+        env.define(name, functionBody);
 
+    }
+
+    ReturnStatement(node, env) {
+        return  this.Expression(node.argument, env);
     }
 
 
@@ -103,7 +110,6 @@ class Interpreter {
         let id = node.id.name;
         let init = this.Expression(node.init, env);
         env.define(id, init);
-        // console.log(env);
     }
 
     ExpressionStatement(expression, env) {
@@ -138,17 +144,28 @@ class Interpreter {
     }
 
     CallExpression(node, env) {
-        let calle = node.calle.name;
-        let args = node.arguments.map((arg) => this.Expression(arg, env));
-
-        if (calle === 'write') {
-            console.log(...args);
-            return;
+        if(node.calle.name === 'write'){
+            return this._callWriteExpression(node, env);
         }
 
-        const calledFunction = env.lookup(calle);
+        let fn = env.lookup(node.calle.name);
+        let args = node.arguments.map((args) => this.Expression(args, env));
+        let params = fn.params.map((param) => param.name);
 
-        return calledFunction(...args);
+        let activationRecord = {};
+        params.forEach((param, index) => {
+            activationRecord[param] = args[index];
+        })
+
+        const activationEnv = new Environment(activationRecord, fn.env);
+
+        return this.Statement(fn.body, activationEnv);
+
+    }
+
+    _callWriteExpression(node, env) {
+        let args = node.arguments.map((args) => this.Expression(args, env));
+        return console.log(...args);
     }
 
 
@@ -196,10 +213,7 @@ class Interpreter {
         let left = this.Expression(node.left, env);
         let right = this.Expression(node.right, env);
 
-        // left = env.lookup(left);
-        // right = env.lookup(right);
-
-        // console.log(left, right);
+        
         switch (node.operator) {
             case '==':
                 return left == right;
@@ -248,7 +262,7 @@ class Interpreter {
         env.lookup(left);
         env.assign(left, right);
         // console.log(env);
-        return;
+        return env.lookup(left);
     }
 
 
@@ -279,7 +293,7 @@ class Interpreter {
 
         env.assign(left, right);
         // console.log(env);
-        return;
+        return env.lookup(left);
     }
 
     Identifier(node, env) {
