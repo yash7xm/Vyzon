@@ -26,7 +26,18 @@ class Interpreter {
                 return this.IfStatement(node, env);
             case 'WhileStatement':
                 return this.WhileStatement(node, env);
+            case 'DoWhileStatement':
+                return this.DoWhileStatement(node, env);
         }
+    }
+
+    DoWhileStatement(node, env) {
+        let result;
+        do{
+            result = this.Statement(node.body, env);
+        }
+        while(this.Expression(node.test, env));
+        return result;
     }
 
     WhileStatement(node, env) {
