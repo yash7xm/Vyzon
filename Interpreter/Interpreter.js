@@ -51,11 +51,10 @@ class Interpreter {
 
     ForStatement(node, env) {
         let result;
-        this.Statement(node.init, env);
-        while (this.Expression(node.test, env)) {
-            result = this.StatementList(node.body, env);
-            this.Expression(node.update, env);
+        for (this.Statement(node.init, env); this.Expression(node.test, env); this.Expression(node.update, env)) {
+            result = this.Statement(node.body, env);
         }
+
         return result;
     }
 
@@ -140,34 +139,16 @@ class Interpreter {
 
     CallExpression(node, env) {
         let calle = node.calle.name;
+        let args = node.arguments.map((arg) => this.Expression(arg, env));
 
-       
-        
-        let argument = this.ArgumentList(node.arguments, env);
-
-        if(calle === 'write') {
-            console.log(argument);
+        if (calle === 'write') {
+            console.log(...args);
             return;
         }
 
-
         const calledFunction = env.lookup(calle);
 
-        (calledFunction({ [argument]: 10 }));
-        // console.log(env);
-
-    }
-
-    ArgumentList(argument, env) {
-        let argumentList = [];
-
-        for(let i=0; i<argument.length; i++){
-            argumentList.push(this.Expression(argument[i], env));
-        }
-
-        argumentList = argumentList.join(',');
-
-        return argumentList;
+        return calledFunction(...args);
     }
 
 
