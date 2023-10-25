@@ -136,6 +136,8 @@ class Interpreter {
                 return this.UnaryExpression(node);
             case 'AssignmentExpression':
                 return this.AssignmentExpression(node, env);
+            case 'ConditionalExpression':
+                return this.ConditionalExpression(node, env);
             case 'BinaryExpression':
                 return this.BinaryExpression(node, env);
             case 'CallExpression':
@@ -166,6 +168,12 @@ class Interpreter {
     _callWriteExpression(node, env) {
         let args = node.arguments.map((args) => this.Expression(args, env));
         return console.log(...args);
+    }
+
+    ConditionalExpression(node, env) {
+        return this.Expression(node.test, env) ? 
+                this.Expression(node.consequent, env) :
+                this.Expression(node.alternate, env);
     }
 
 

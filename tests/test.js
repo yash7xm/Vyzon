@@ -11,9 +11,9 @@ const interpreter = new Interpreter();
 
 const program = `
 let a = 5,b;
-let result = a + b;
-write(result);
 
+a = a > b? 10 : 100;
+write(a);
 
 `;
 console.log("==================================");
