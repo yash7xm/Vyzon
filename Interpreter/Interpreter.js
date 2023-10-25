@@ -108,7 +108,7 @@ class Interpreter {
 
     VariableDeclaration(node, env) {
         let id = node.id.name;
-        let init = this.Expression(node.init, env);
+        let init = node.init !== null ? this.Expression(node.init, env): 0;
         env.define(id, init);
     }
 
@@ -258,11 +258,11 @@ class Interpreter {
 
     SimpleAssign(node, env) {
         let left = node.left.name;
-        let right = this.Expression(node.right, env);
+        let right = node.right !== null ? this.Expression(node.right, env) : 0;
         env.lookup(left);
         env.assign(left, right);
         // console.log(env);
-        return env.lookup(left);
+        return ;
     }
 
 
@@ -293,7 +293,7 @@ class Interpreter {
 
         env.assign(left, right);
         // console.log(env);
-        return env.lookup(left);
+        return;
     }
 
     Identifier(node, env) {
