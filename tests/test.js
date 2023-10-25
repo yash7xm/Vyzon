@@ -1,6 +1,6 @@
 const { Tokenizer } = require('../src/Tokenizer.js');
 const { Parser } = require('../src/Parser.js');
-const { Generator } = require('../src/Generator.js');
+const { Generator } = require('../Generator/Generator.js');
 const { Interpreter } = require('../Interpreter/Interpreter.js');
 
 const tokenizer = new Tokenizer();
