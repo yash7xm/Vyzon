@@ -11,7 +11,11 @@ class Interpreter {
     }
 
     StatementList(body, env = this.global) {
-        return body.map((statement) => this.Statement(statement, env)).join('\n');
+        let result;
+        for (const statement of body) {
+          result = this.Statement(statement, env);
+        }
+        return result;
     }
 
     Statement(node, env) {
@@ -30,7 +34,7 @@ class Interpreter {
                 return this.DoWhileStatement(node, env);
             case 'ForStatement':
                 return this.ForStatement(node, env);
-            case 'FunctionDeclatration':
+            case 'FunctionDeclaration':
                 return this.FunctionDeclaration(node, env);
             case 'ReturnStatement':
                 return this.ReturnStatement(node, env);
@@ -47,7 +51,6 @@ class Interpreter {
         }
 
         env.define(name, functionBody);
-
     }
 
     ReturnStatement(node, env) {

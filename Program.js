@@ -79,7 +79,7 @@ const Program = `
 // }
 
 // let sum = add(5, 3);
-// write("The sum is: " + sum);
+// write(sum);
 
 
 // function 
@@ -105,6 +105,49 @@ const Program = `
 //     write("y is greater than or equal to x");
 // }
 
+// Example 
+//    def isEven(a) {
+//     return a == 2;
+//    }
+//    write(isEven(2));
+
+
+def isDivisible(n, divisor) {
+    while (n >= divisor) {
+        n = n - divisor;
+    }
+    return n == 0;
+}
+
+def isPrime(n) {
+    if (n <= 1) {
+        return false;
+    }
+    if (n <= 3) {
+        return true;
+    }
+    if (isDivisible(n, 2) || isDivisible(n, 3)) {
+        return false;
+    }
+    let i = 5;
+    while (i * i <= n) {
+        if (isDivisible(n, i) || isDivisible(n, i + 2)) {
+            return false;
+        }
+        i = i + 6;
+    }
+    return true;
+}
+
+def findPrimes(limit) {
+    for (let num = 2; num <= limit; num=num+1) {
+        if (isPrime(num)) {
+            write(num);
+        }
+    }
+}
+
+findPrimes(30);
 
 
 

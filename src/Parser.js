@@ -282,7 +282,7 @@ class Parser {
         const body = this.BlockStatement();
 
         return {
-            type: 'FunctionDeclatration',
+            type: 'FunctionDeclaration',
             name,
             params,
             body

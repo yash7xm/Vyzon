@@ -30,8 +30,8 @@ class Generator {
         return this.DoWhileStatement(node);
       case 'ForStatement':
         return this.ForStatement(node);
-      case 'FunctionDeclatration':
-        return this.FunctionDeclatration(node);
+      case 'FunctionDeclaration':
+        return this.FunctionDeclaration(node);
       case 'ReturnStatement':
         return this.ReturnStatement(node.argument);
       default:
@@ -105,7 +105,7 @@ class Generator {
     }
   }
 
-  FunctionDeclatration(node) {
+  FunctionDeclaration(node) {
     let name = this.Identifier(node.name);
     let params = this.FunctionParamsList(node.params);
     let body = this.BlockStatement(node.body.body);
