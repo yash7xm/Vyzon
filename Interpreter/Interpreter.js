@@ -1,4 +1,5 @@
 const Environment = require('./Environment.js');
+const readline = require('readline');
 
 class Interpreter {
 
@@ -13,7 +14,7 @@ class Interpreter {
     StatementList(body, env = this.global) {
         let result;
         for (const statement of body) {
-          result = this.Statement(statement, env);
+            result = this.Statement(statement, env);
         }
         return result;
     }
@@ -54,7 +55,7 @@ class Interpreter {
     }
 
     ReturnStatement(node, env) {
-        return  this.Expression(node.argument, env);
+        return this.Expression(node.argument, env);
     }
 
     ForStatement(node, env) {
@@ -88,7 +89,7 @@ class Interpreter {
     IfStatement(node, env) {
         const test = this.Expression(node.test, env);
         // console.log(test);
-    
+
         if (test) {
             return this.Statement(node.consequent, env);
         } else if (node.alternate) {
@@ -110,7 +111,7 @@ class Interpreter {
 
     VariableDeclaration(node, env) {
         let id = node.id.name;
-        let init = node.init !== null ? this.Expression(node.init, env): 0;
+        let init = node.init !== null ? this.Expression(node.init, env) : 0;
         env.define(id, init);
     }
 
@@ -150,9 +151,10 @@ class Interpreter {
     }
 
     CallExpression(node, env) {
-        if(node.calle.name === 'write'){
+        if (node.calle.name === 'write') {
             return this._callWriteExpression(node, env);
         }
+
 
         let fn = env.lookup(node.calle.name);
         let args = node.arguments.map((args) => this.Expression(args, env));
@@ -176,8 +178,8 @@ class Interpreter {
 
     MemberExpression(node, env) {
         let object = this.Identifier(node.object, env);
-        
-        if(node.computed) {
+
+        if (node.computed) {
             return object[this.Expression(node.property, env)];
         }
         else {
@@ -187,9 +189,9 @@ class Interpreter {
     }
 
     ConditionalExpression(node, env) {
-        return this.Expression(node.test, env) ? 
-                this.Expression(node.consequent, env) :
-                this.Expression(node.alternate, env);
+        return this.Expression(node.test, env) ?
+            this.Expression(node.consequent, env) :
+            this.Expression(node.alternate, env);
     }
 
     AssignmentExpression(node, env) {
@@ -239,7 +241,7 @@ class Interpreter {
         let left = this.Expression(node.left, env);
         let right = this.Expression(node.right, env);
 
-        
+
         switch (node.operator) {
             case '==':
                 return left == right;
@@ -288,7 +290,7 @@ class Interpreter {
         env.lookup(left);
         env.assign(left, right);
         // console.log(env);
-        return ;
+        return;
     }
 
 
