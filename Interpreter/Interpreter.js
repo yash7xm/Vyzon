@@ -206,6 +206,7 @@ class Interpreter {
             case '-':
             case '*':
             case '/':
+            case '%':
                 return this.MathExpression(node, env);
             case '==':
             case '>':
@@ -229,6 +230,8 @@ class Interpreter {
                 return left * right;
             case '/':
                 return left / right;
+            case '%':
+                return left % right;
         }
     }
 

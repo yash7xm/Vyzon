@@ -213,7 +213,7 @@ const Program = `
 
 // write(foo(1));
 
-1 % 2;
+write(2 * 3 % 4);
 
 
 `
