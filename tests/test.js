@@ -27,11 +27,11 @@ console.log("==================================");
 console.log(code);
 
 console.log("==================================");
-// try {
-//   eval(code);
-// } catch (error) {
-//   console.error("Error running the generated code:", error);
-// }
+try {
+  eval(code);
+} catch (error) {
+  console.error("Error running the generated code:", error);
+}
 
 
 console.log("==================================");

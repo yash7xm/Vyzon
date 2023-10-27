@@ -195,16 +195,16 @@ const Program = `
 // main();
 
 
-// def sumOfNaturalNumbers(n) {
-//     if (n <= 1) {
-//         return n;
-//     } else {
-//         return n + sumOfNaturalNumbers(n - 1);
-//     }
-// }
+def sumOfNaturalNumbers(n) {
+    if (n <= 1) {
+        return n;
+    } else {
+        return n + sumOfNaturalNumbers(n - 1);
+    }
+}
 
-// let n = 550;
-// write("The sum of first " + n + " natural numbers is: " + sumOfNaturalNumbers(n));
+let n = 550;
+write("The sum of first " + n + " natural numbers is: " + sumOfNaturalNumbers(n));
 
 // def foo(a) {
 //     if(a > 1) return 0;
