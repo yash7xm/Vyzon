@@ -468,11 +468,11 @@ class Parser {
     }
 
     MultipicativeExpression() {
-        let left = this.UnaryExpression();
+        let left = this.ModuloExpreesion();
 
         while (this._lookahead.type === 'MULTIPLICATIVE_OPERATOR') {
             const operator = this._eat('MULTIPLICATIVE_OPERATOR').value;
-            const right = this.UnaryExpression();
+            const right = this.ModuloExpreesion();
             left = {
                 type: 'BinaryExpression',
                 operator,
@@ -484,6 +484,22 @@ class Parser {
         return left;
     }
 
+    ModuloExpreesion() {
+        let left = this.UnaryExpression();
+
+        while(this._lookahead.type === 'MODULO_OPERATOR') {
+            const operator = this._eat('MODULO_OPERATOR').value;
+            const right = this.UnaryExpression();
+            left = {
+                type: 'BinaryExpression',
+                operator,
+                left,
+                right
+            }
+        }
+
+        return left;
+    }
 
     UnaryExpression() {
         let operator;

@@ -206,12 +206,14 @@ const Program = `
 // let n = 550;
 // write("The sum of first " + n + " natural numbers is: " + sumOfNaturalNumbers(n));
 
-def foo(a) {
-    if(a > 1) return 0;
-    return a + foo(a+1);
-}
+// def foo(a) {
+//     if(a > 1) return 0;
+//     return a + foo(a+1);
+// }
 
-write(foo(1));
+// write(foo(1));
+
+1 % 2;
 
 
 `
