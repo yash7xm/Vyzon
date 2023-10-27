@@ -1,17 +1,17 @@
 const Program = `
 
 // Factorial
-// def factorial(n) {
-//     if (n <= 1) {
-//         return 1;
-//     }
-//     else {
-//         return n * factorial(n - 1);
-//     }
-// }
+def factorial(n) {
+    if (n <= 1) {
+        return 1;
+    }
+    else {
+        return n * factorial(n - 1);
+    }
+}
 
-// let result = factorial(5);
-// write(result);
+let result = factorial(5);
+write(result);
 
 
 // Fibonacci 
@@ -183,7 +183,9 @@ const Program = `
 //     if (n == 0 || n == 1) {
 //         return 1;
 //     }
-//     return n * calculateFactorial(n - 1);
+//     else return n * calculateFactorial(n - 1);
+
+//     // return (n==0 || n==1) ? 1 : n * calculateFactorial(n-1);
 // }
 
 // def main() {
@@ -207,24 +209,60 @@ const Program = `
 // write("The sum of first " + n + " natural numbers is: " + sumOfNaturalNumbers(n));
 
 // def foo(a) {
-//     if(a > 1) return 0;
-//     return a + foo(a+1);
+//     if(a > 10) return 0;
+//     else return a + foo(a+1);
 // }
 
-// write(foo(1));
+// let a= 5;
+// write(foo(a + 5));
 
 
-def isEven(a) {
-    if(a % 2 == 0) {
-        write("even");
-    }
-    elif(a % 2 != 0){
-        write('odd');
-    }
-}
+// def isEven(a) {
+//     if(a % 2 == 0) {
+//         write("even");
+//     }
+//     elif(a % 2 != 0){
+//         write('odd');
+//     }
+// }
 
-isEven(25);
+// isEven(25);
 
+
+// def fun4(d){
+//     write(d);
+// }
+
+// def fun3(c) {
+//     fun4('h');
+//     write(c);
+// }
+
+// def fun2(b) {
+//     fun3('s');
+//     write(b);
+// }
+
+// def fun1(a) {
+//     fun2('a');
+//     write(a);
+// }
+
+// fun1('y');
+
+// def ad(a) {
+//     return a;
+// }
+
+// def ab(a) {
+//     return a;
+// }
+
+// def foo(a) {
+//     if(a==1) return 1;
+//     return foo(ad(a-1) + ab(a-2));
+// }
+// write(foo(2));
 
 `
 

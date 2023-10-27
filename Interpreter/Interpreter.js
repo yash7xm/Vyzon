@@ -87,18 +87,15 @@ class Interpreter {
     }
 
     IfStatement(node, env) {
-        const test = this.Expression(node.test, env);
-        // console.log(test);
-
-        if (test) {
+        const testResult = this.Expression(node.test, env);
+        if (testResult) {
             return this.Statement(node.consequent, env);
         } else if (node.alternate) {
             return this.Statement(node.alternate, env);
         } else {
-            return undefined;
+            return null;
         }
     }
-
 
     BlockStatement(node, env) {
         const blockEnv = new Environment({}, env);
@@ -154,7 +151,6 @@ class Interpreter {
         if (node.calle.name === 'write') {
             return this._callWriteExpression(node, env);
         }
-
 
         let fn = env.lookup(node.calle.name);
         let args = node.arguments.map((args) => this.Expression(args, env));
