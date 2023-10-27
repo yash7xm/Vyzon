@@ -215,6 +215,7 @@ class Interpreter {
             case '<':
             case '>=':
             case '<=':
+            case '!=':
                 return this.RealationalExpression(node, env);
         }
     }
@@ -253,6 +254,8 @@ class Interpreter {
                 return left < right;
             case '<=':
                 return left <= right;
+            case '!=':
+                return left != right;
         }
     }
 
