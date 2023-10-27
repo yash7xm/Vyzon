@@ -57,8 +57,6 @@ class Interpreter {
         return  this.Expression(node.argument, env);
     }
 
-
-
     ForStatement(node, env) {
         let result;
         for (this.Statement(node.init, env); this.Expression(node.test, env); this.Expression(node.update, env)) {
@@ -89,6 +87,7 @@ class Interpreter {
 
     IfStatement(node, env) {
         const test = this.Expression(node.test, env);
+        // console.log(test);
     
         if (test) {
             return this.Statement(node.consequent, env);
@@ -98,7 +97,6 @@ class Interpreter {
             return undefined;
         }
     }
-    
 
 
     BlockStatement(node, env) {

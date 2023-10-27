@@ -72,9 +72,10 @@ const Spec = [
     [/^[\*\\/\+\-]=/, 'COMPLEX_ASSIGN'],
 
     // --------------------------------------
-    // Math operators: +, -, *, /
+    // Math operators: +, -, *, /, %
     [/^[+\-]/, 'ADDITIVE_OPERATOR'],
     [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
+    [/^%/, 'MODULO_OPERATOR'],
 
     // --------------------------------------
     // Numbers:

@@ -484,6 +484,7 @@ class Parser {
         return left;
     }
 
+
     UnaryExpression() {
         let operator;
         switch (this._lookahead.type) {
