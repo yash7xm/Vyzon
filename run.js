@@ -31,7 +31,6 @@ fs.readdir(directory, (err, files) => {
         }
 
         let code = data;
-        console.log(code);
 
         const ast = parser.parse(code);
 
