@@ -7,13 +7,31 @@ const gen = new Generator();
 const interpreter = new Interpreter();
 
 const fs = require('fs');
-const file = 'my_program.pynot';
+const directory = './';
 
-fs.readFile(file, 'utf8', (err, data) => {
+fs.readdir(directory, (err, files) => {
     if (err) {
-        console.log(`Error reading ${file}: ${err}`);
-    } else {
+        console.error(`Error reading directory: ${err}`);
+        return;
+    }
+
+    const pynotFile = files.find(file => file.endsWith('.pynot'));
+
+    if (!pynotFile) {
+        console.error('No .pynot files found in the directory.');
+        return;
+    }
+
+    const filePath = `${directory}/${pynotFile}`;
+
+    fs.readFile(filePath, 'utf8', (readErr, data) => {
+        if (readErr) {
+            console.error(`Error reading ${filePath}: ${readErr}`);
+            return;
+        }
+
         let code = data;
+        console.log(code);
 
         const ast = parser.parse(code);
 
@@ -27,9 +45,9 @@ fs.readFile(file, 'utf8', (err, data) => {
             console.error("Error running the generated code:", error);
         }
 
-        console.log("Interpreter Generated Code");
         console.log("==================================");
+        console.log("Interpreter Generated Code");
 
         const ev = interpreter.interpret(ast.body);
-    }
+    });
 });
