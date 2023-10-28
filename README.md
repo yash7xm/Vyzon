@@ -121,6 +121,7 @@ def greet(name) {
 }
 
 greet("Yash"); // Calls the greet function with "Alice" as an argument.
+```
 
 ## Operators 
 
