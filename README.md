@@ -133,3 +133,9 @@ greet("Yash"); // Calls the greet function with "Alice" as an argument.
   - The arithmetic operators are the same as in other programming languages. Ex: `+, -, *, /, %, ^`
 * **Assignment operators:**
   - Assignment operators are the same as in other programming languages. Ex: `=, +=, -=, *=, /=`
+
+## Rules
+
+1. Every statement in PyNot should end with a semicolon `(;)` to indicate the termination of the statement.
+2. Variable names in PyNot should not start with a number.
+3. All functions in PyNot should be declared above their function calls.
