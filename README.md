@@ -56,7 +56,9 @@ write("abc");
 write("write anything: ", a);
 ```
 ### String Operations
-String Operations
+
+PyNot provides string manipulation capabilities:
+
 * **`.length` Property**: To find the length of a string, use the .length property. For example:
 ```pynot
 let a = 'abcd';
@@ -108,3 +110,14 @@ do {
   k = k + 1;
 } while (k < 5);
 ```
+
+## Functions
+
+You can declare functions in PyNot using the def keyword, followed by the function name and parameters enclosed in parentheses. The function body is defined in a block. To call a function, use its name followed by parentheses, passing any required arguments.
+
+```pynot
+def greet(name) {
+  write("Hello, " + name + "!");
+}
+
+greet("Yash"); // Calls the greet function with "Alice" as an argument.
