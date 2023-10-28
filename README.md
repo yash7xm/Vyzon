@@ -126,10 +126,10 @@ greet("Yash"); // Calls the greet function with "Alice" as an argument.
 ## Operators 
 
 * **Logical Operators:** 
-  The logical operators are the same as in other programming languages. Ex: `&&,||,!`
+  - The logical operators are the same as in other programming languages. Ex: `&&,||,!`
 * **Relational operators:** 
-  The relational operators are the same as in other programming languages. Ex: `<, >, <=, >=, ==, !=`
+  - The relational operators are the same as in other programming languages. Ex: `<, >, <=, >=, ==, !=`
 * **Arithmetic operators:**
-   The arithmetic operators are the same as in other programming languages. Ex: `+, -, *, /, %, ^`
+  - The arithmetic operators are the same as in other programming languages. Ex: `+, -, *, /, %, ^`
 * **Assignment operators:**
-   Assignment operators are the same as in other programming languages. Ex: `=, +=, -=, *=, /=`
+  - Assignment operators are the same as in other programming languages. Ex: `=, +=, -=, *=, /=`
