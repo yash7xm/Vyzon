@@ -36,16 +36,24 @@ fs.readdir(directory, (err, files) => {
 
         let generatedCode = gen.generate(ast.body);
 
-        console.log("AST Transformer Type Compiled Code Result");
+        console.log("==Compiler Generated Code Result==");
+
         console.log("==================================");
+
+        console.log('');
         try {
             eval(generatedCode);
         } catch (error) {
             console.error("Error running the generated code:", error);
         }
 
+        console.log('\n');
+
+
+        console.log("==Interpreter Generated Code Result==");
         console.log("==================================");
-        console.log("Interpreter Generated Code");
+
+        console.log('');
 
         const ev = interpreter.interpret(ast.body);
     });
