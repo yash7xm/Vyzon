@@ -31,16 +31,15 @@ let c = 'Hello World!';
 
 ## Data Types in PyNot
 
-PyNot supports various data types to represent different kinds of values. The two fundamental Boolean data types in PyNot are `true` and `false`, used to represent boolean values for logical operations.
+PyNot supports various data types, including strings, numbers, true, false, and null, to represent a wide range of values. 
+For example:
 
-### Boolean Data Types
-
-- `true`: Represents a boolean value indicating true or success.
-
-- `false`: Represents a boolean value indicating false or failure.
-
-### Null Data Type
-
-- `null`: Represents the absence of any value or a null value. It is commonly used to indicate that a variable or expression does not hold any meaningful data.
-
-In PyNot, these data types are essential for making logical decisions and handling different situations in your code.
+```pynot
+let a = 'Hello, World!';
+let b = 10;
+let c = 10 + (10 * 3) + a;
+let d = "Ok!";
+let e = null;
+let f = true;
+let g = false;
+```
