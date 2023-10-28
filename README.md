@@ -31,7 +31,7 @@ let c = 'Hello, World!';
 
 ## Data Types
 
-PyNot supports various data types, including strings, numbers, true, false, and null, to represent a wide range of values. 
+PyNot supports various data types, including `strings`, `numbers`, `true`, `false`, and `null`, to represent a wide range of values. 
 For example:
 
 ```pynot
@@ -46,7 +46,7 @@ let g = false;
 
 ## Build-ins
 ### Console Output
-In PyNot, you can print to the console using the write() function. 
+In PyNot, you can print to the console using the `write()` function. 
 Here are some examples:
 
 ```pynot
@@ -72,7 +72,7 @@ write(a[0]); // This will print the first character 'a'.
 ```
 ## Conditionals
 
-PyNot supports conditional statements for decision-making in your code. You can use the if, elif, and else statements to execute different blocks of code based on specific conditions. Here's an example:
+PyNot supports conditional statements for decision-making in your code. You can use the `if`, `elif`, and `else` statements to execute different blocks of code based on specific conditions. Here's an example:
 
 ```pynot 
 let x = 10;
@@ -88,7 +88,7 @@ if (x > 15) {
 
 ## Loops 
 
- PyNot supports various loop types to suit your needs. You can use for, while, and do while loops to control the flow of your PyNot programs by repeating code as needed.
+ PyNot supports various loop types to suit your needs. You can use `for`, `while`, and `do while` loops to control the flow of your PyNot programs by repeating code as needed.
 
  ```pynot 
 write("Using the for loop:");
@@ -113,7 +113,7 @@ do {
 
 ## Functions
 
-You can declare functions in PyNot using the def keyword, followed by the function name and parameters enclosed in parentheses. The function body is defined in a block. To call a function, use its name followed by parentheses, passing any required arguments.
+You can declare functions in PyNot using the `def` keyword, followed by the function name and parameters enclosed in parentheses. The function body is defined in a block. To call a function, use its name followed by parentheses, passing any required arguments.
 
 ```pynot
 def greet(name) {
