@@ -68,3 +68,18 @@ write(a.length); // This will print the length of the string.
 let a = 'abcd';
 write(a[0]); // This will print the first character 'a'.
 ```
+## Conditionals
+
+PyNot supports conditional statements for decision-making in your code. You can use the if, elif, and else statements to execute different blocks of code based on specific conditions. Here's an example:
+
+```pynot 
+let x = 10;
+
+if (x > 15) {
+  write("x is greater than 15");
+} elif (x > 5) {
+  write("x is greater than 5 but not greater than 15");
+} else {
+  write("x is not greater than 5");
+}
+```
