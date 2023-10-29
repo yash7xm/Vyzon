@@ -8,7 +8,7 @@ To use PyNot locally, follow these steps:
 
 1. **Clone the repository** to your local machine using Git:
    `
-   https://github.com/yash7xm/PyNot.git
+   git clone https://github.com/yash7xm/PyNot.git
    `
 2. **Change your current directory** to the cloned repository: ` cd PyNot `
  
