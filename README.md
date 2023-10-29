@@ -23,7 +23,7 @@ To use PyNot locally, follow these steps:
 
 In PyNot, variables are declared using the `let` keyword. By default, when you declare a variable using `let`, it is initialized with a value of 0. For example:
 
-```pynot
+```
 let a;  // Variable 'a' is declared and initialized with the default value of 0
 let b = 1;  // Variable 'b' is declared and initialized with the value 1
 let c = 'Hello, World!';
@@ -34,7 +34,7 @@ let c = 'Hello, World!';
 PyNot supports various data types, including `strings`, `numbers`, `true`, `false`, and `null`, to represent a wide range of values. 
 For example:
 
-```pynot
+```
 let a = 'Hello, World!';
 let b = 10;
 let c = 10 + (10 * 3) + a;
@@ -49,7 +49,7 @@ let g = false;
 In PyNot, you can print to the console using the `write()` function. 
 Here are some examples:
 
-```pynot
+```
 let a = 'Anything';
 write(a); 
 write("abc");
@@ -60,13 +60,13 @@ write("write anything: ", a);
 PyNot provides string manipulation capabilities:
 
 * **`.length` Property**: To find the length of a string, use the .length property. For example:
-```pynot
+```
 let a = 'abcd';
 write(a.length); // This will print the length of the string.
 ```
 * **String Indexing**: You can access individual characters within a string using square brackets. For instance:
 
-```pynot 
+``` 
 let a = 'abcd';
 write(a[0]); // This will print the first character 'a'.
 ```
@@ -74,7 +74,7 @@ write(a[0]); // This will print the first character 'a'.
 
 PyNot supports conditional statements for decision-making in your code. You can use the `if`, `elif`, and `else` statements to execute different blocks of code based on specific conditions. Here's an example:
 
-```pynot 
+```
 let x = 10;
 
 if (x > 15) {
@@ -90,7 +90,7 @@ if (x > 15) {
 
  PyNot supports various loop types to suit your needs. You can use `for`, `while`, and `do while` loops to control the flow of your PyNot programs by repeating code as needed.
 
- ```pynot 
+ ``` 
 write("Using the for loop:");
 for (let i=0; i<10; i+=1) {
   write("Current value of i: ", i);
@@ -115,7 +115,7 @@ do {
 
 You can declare functions in PyNot using the `def` keyword, followed by the function name and parameters enclosed in parentheses. The function body is defined in a block. To call a function, use its name followed by parentheses, passing any required arguments.
 
-```pynot
+```
 def greet(name) {
   write("Hello, " + name + "!");
 }
