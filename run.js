@@ -15,7 +15,7 @@ fs.readdir(directory, (err, files) => {
         return;
     }
 
-    const pynotFile = files.find(file => file.endsWith('.pynot'));
+    const pynotFile = files.find(file => file.endsWith('.vy'));
 
     if (!pynotFile) {
         console.error('No .pynot files found in the directory.');
