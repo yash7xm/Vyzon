@@ -25,7 +25,6 @@
         }
 
         if(this.parent == null) {
-            console.log(name);
             throw new ReferenceError(`Variable "${name}" is not defined.`);
         }
 

@@ -1,38 +1,23 @@
-let global = "a";
+class Animal {
+    let name;
 
-def sum() {
-    write("sum");
+    def constructor(name) {
+        this.name = name;
+    }
+
+    def showName() {
+        write(this.name);
+    }
 }
 
-class a {
-    let name = 'yash';
-
-    def constructor() {
-        write("HEY YO!");
+class Monkey extends Animal {
+    def sound() {
+        write("Monkey");
     }
-
-    def afn() {
-        write("a");
-    }
-
-    this.afn();
 }
 
-
-class b extends a {
-    let age = 5;
-
-    def constructor(inc) {
-        age += inc;
-        write(age, name);
+class Lion extends Animal {
+    def sound() {
+        write("Lion");
     }
-
-    def cal() {
-        write(age);
-    }
-
-    this.cal();
 }
-
-
-

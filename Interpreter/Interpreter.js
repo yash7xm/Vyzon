@@ -170,13 +170,17 @@ class Interpreter {
     }
 
     ThisExpression(node, env) {
-        return env;
+        let instance;
+        try {
+            instance = env.lookup('this');
+        } catch {
+            instance = env;
+        }
+        return instance;
     }
 
     CallExpression(node, env) {
         if (node.calle.type === 'MemberExpression') {
-            console.log(node);
-            console.log(env);
             let object = this.Expression(node.calle.object, env);
             let method = object.lookup(node.calle.property.name);
     
@@ -360,11 +364,20 @@ class Interpreter {
     }
 
     SimpleAssign(node, env) {
-        let left = node.left.name;
-        let right = node.right !== null ? this.Expression(node.right, env) : null;
-        env.lookup(left);
-        env.assign(left, right);
-        return;
+        if (node.left.type === 'MemberExpression' && node.left.object.type === 'ThisExpression') {
+            const instanceEnv = env.lookup('this');
+            const fieldName = node.left.property.name;
+            const value = this.Expression(node.right, env);
+                
+            instanceEnv.define(fieldName, value);
+    
+            return value;
+        }
+    
+        const varName = node.left.name;
+        const value = this.Expression(node.right, env);
+        env.assign(varName, value);
+        return value;
     }
 
 
