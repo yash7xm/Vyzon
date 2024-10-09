@@ -47,14 +47,16 @@ class Interpreter {
     ClassDeclaration(node, env) {
         const className = node.id.name;
         const superClassName = node.superClass ? node.superClass.name : null;
-        const parentEnv = superClassName ? this.Statement(superClassName, env) || env : env;
+    
+        const parentEnv = superClassName ? env.lookup(superClassName) : env;
     
         const classEnv = new Environment({}, parentEnv);
-    
-        this.Statement(node.body, classEnv);
+
+        this.StatementList(node.body.body, classEnv);
     
         return env.define(className, classEnv);
     }
+    
     
     
     FunctionDeclaration(node, env) {
@@ -67,7 +69,7 @@ class Interpreter {
             env
         }
 
-        env.define(name, functionBody);
+        return env.define(name, functionBody);
     }
 
     ReturnStatement(node, env) {
@@ -160,15 +162,40 @@ class Interpreter {
                 return this.BinaryExpression(node, env);
             case 'CallExpression':
                 return this.CallExpression(node, env);
+            case 'NewExpression':
+                return this.NewExpression(node, env);
         }
     }
 
     CallExpression(node, env) {
+        if (node.calle.type === 'MemberExpression') {
+            let object = this.Expression(node.callee.object, env);
+            let method = object.lookup(node.callee.property.name);
+    
+            let args = node.arguments.map(arg => this.Expression(arg, env));
+            let params = method.params.map(param => param.name);
+    
+            const activationRecord = {};
+            params.forEach((param, index) => {
+                activationRecord[param] = args[index];
+            });
+    
+            activationRecord['this'] = object;
+    
+            const activationEnv = new Environment(activationRecord, method.env);
+    
+            return this.Statement(method.body, activationEnv);
+        }
+        
+        return this._normalCallExpression(node, env);
+    }
+    
+    _normalCallExpression(node, env) {
         if (node.calle.name === 'write') {
             return this._callWriteExpression(node, env);
         }
 
-        let fn = env.lookup(node.calle.name);
+        let fn = env.lookup(node.callee.name);
         let args = node.arguments.map((args) => this.Expression(args, env));
         let params = fn.params.map((param) => param.name);
 
@@ -180,7 +207,6 @@ class Interpreter {
         const activationEnv = new Environment(activationRecord, fn.env);
 
         return this.Statement(fn.body, activationEnv);
-
     }
 
     _callWriteExpression(node, env) {
@@ -188,17 +214,47 @@ class Interpreter {
         return console.log(...args);
     }
 
-    MemberExpression(node, env) {
-        let object = this.Identifier(node.object, env);
-
-        if (node.computed) {
-            return object[this.Expression(node.property, env)];
+    NewExpression(node, env) {
+        let classEnv = env.lookup(node.callee.name);
+    
+        let instanceEnv = new Environment({}, classEnv);
+    
+        let constructor = classEnv.lookup('constructor');
+        if (constructor) {
+            let args = node.arguments.map(arg => this.Expression(arg, env));
+            let params = constructor.params.map(param => param.name);
+    
+            const activationRecord = {};
+            params.forEach((param, index) => {
+                activationRecord[param] = args[index];
+            });
+    
+            activationRecord['this'] = instanceEnv;
+    
+            const activationEnv = new Environment(activationRecord, constructor.env);
+    
+            this.Statement(constructor.body, activationEnv);
         }
-        else {
-            let property = node.property.name;
-            return object[property];
+    
+        return instanceEnv;
+    }
+    
+    
+
+    MemberExpression(node, env) {
+        // Get the object instance
+        let object = this.Expression(node.object, env);
+    
+        // Get the property or method name
+        if (node.computed) {
+            // If computed property access
+            return object.lookup(this.Expression(node.property, env));
+        } else {
+            // If static property access
+            return object.lookup(node.property.name);
         }
     }
+
 
     ConditionalExpression(node, env) {
         return this.Expression(node.test, env) ?
@@ -304,7 +360,6 @@ class Interpreter {
         let right = node.right !== null ? this.Expression(node.right, env) : null;
         env.lookup(left);
         env.assign(left, right);
-        // console.log(env);
         return;
     }
 
@@ -335,7 +390,6 @@ class Interpreter {
         }
 
         env.assign(left, right);
-        // console.log(env);
         return;
     }
 

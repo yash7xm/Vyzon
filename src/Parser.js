@@ -642,7 +642,7 @@ class Parser {
         this._eat('new');
         return {
             type: 'NewExpression',
-            calle: this.MemberExpression(),
+            callee: this.MemberExpression(),
             arguments: this.Arguments()
         }
     }
