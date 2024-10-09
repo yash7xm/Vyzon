@@ -39,8 +39,24 @@ class Interpreter {
                 return this.FunctionDeclaration(node, env);
             case 'ReturnStatement':
                 return this.ReturnStatement(node, env);
+            case 'ClassDeclaration':
+                return this.ClassDeclaration(node, env);
         }
     }
+
+    ClassDeclaration(node, env) {
+        const className = node.id.name;
+        const superClassName = node.superClass ? node.superClass.name : null;
+        const parentEnv = superClassName ? this.Statement(superClassName, env) || env : env;
+    
+        const classEnv = new Environment({}, parentEnv);
+    
+        this.Statement(node.body, classEnv);
+    
+        return env.define(className, classEnv);
+    }
+    
+    
     FunctionDeclaration(node, env) {
         let name = node.name.name;
 

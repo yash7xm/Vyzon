@@ -1,13 +1,19 @@
-def factorial(n) {
-    if (n <= 1) {
-        return 1;
+class a {
+    let name;
+}
+
+
+class b extends a {
+    let b;
+
+    def constructor (b) {
+        this.b = b;
     }
-    else {
-        return n * factorial(n - 1);
+
+    def cal () {
+        return this.b;
     }
 }
 
-let result = factorial(5);
-write(result);
 
 
