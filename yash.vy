@@ -14,6 +14,8 @@ class a {
     def afn() {
         write("a");
     }
+
+    this.afn();
 }
 
 
@@ -28,10 +30,9 @@ class b extends a {
     def cal() {
         write(age);
     }
-}
 
-let obj1 = new b(10);
-let obj2 = new b(100);
+    this.cal();
+}
 
 
 

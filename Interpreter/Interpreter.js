@@ -164,13 +164,21 @@ class Interpreter {
                 return this.CallExpression(node, env);
             case 'NewExpression':
                 return this.NewExpression(node, env);
+            case 'ThisExpression':
+                return this.ThisExpression(node, env);
         }
+    }
+
+    ThisExpression(node, env) {
+        return env;
     }
 
     CallExpression(node, env) {
         if (node.calle.type === 'MemberExpression') {
-            let object = this.Expression(node.callee.object, env);
-            let method = object.lookup(node.callee.property.name);
+            console.log(node);
+            console.log(env);
+            let object = this.Expression(node.calle.object, env);
+            let method = object.lookup(node.calle.property.name);
     
             let args = node.arguments.map(arg => this.Expression(arg, env));
             let params = method.params.map(param => param.name);
@@ -186,7 +194,7 @@ class Interpreter {
     
             return this.Statement(method.body, activationEnv);
         }
-        
+
         return this._normalCallExpression(node, env);
     }
     
@@ -242,15 +250,11 @@ class Interpreter {
     
 
     MemberExpression(node, env) {
-        // Get the object instance
         let object = this.Expression(node.object, env);
     
-        // Get the property or method name
         if (node.computed) {
-            // If computed property access
             return object.lookup(this.Expression(node.property, env));
         } else {
-            // If static property access
             return object.lookup(node.property.name);
         }
     }
