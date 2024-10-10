@@ -26,7 +26,7 @@ To use Vyzon locally, follow these steps:
 # Running an Expression Directly
 
 1. You can also run an expression directly from the command line by using the `-e` flag:
-   `bin/vyzon -e "2 + 2"`
+   `bin/vyzon -e "write(2 + 2);"`
    This will parse and evaluate the expression `2 + 2`.
 
 # Documentation
@@ -36,7 +36,7 @@ To use Vyzon locally, follow these steps:
 In Vyzon, variables are declared using the `let` keyword. By default, when you declare a variable using `let`, it is initialized with a value of 0. For example:
 
 ```
-let a;  // Variable 'a' is declared and initialized with the default value of 0
+let a;      // Variable 'a' is declared and initialized with the default value of 0
 let b = 1;  // Variable 'b' is declared and initialized with the value 1
 let c = 'Hello, World!';
 ```
@@ -78,11 +78,11 @@ Vyzon supports conditional statements for decision-making in your code. You can 
 let x = 10;
 
 if (x > 15) {
-  write("x is greater than 15");
+    write("x is greater than 15");
 } elif (x > 5) {
-  write("x is greater than 5 but not greater than 15");
+    write("x is greater than 5 but not greater than 15");
 } else {
-  write("x is not greater than 5");
+    write("x is not greater than 5");
 }
 ```
 
@@ -92,22 +92,25 @@ Vyzon supports various loop types to suit your needs. You can use `for`, `while`
 
 ```
 write("Using the for loop:");
+
 for (let i=0; i<10; i+=1) {
- write("Current value of i: ", i);
+    write("Current value of i: ", i);
 }
 
 write("Using the while loop:");
+
 let j = 0;
 while (j < 5) {
- write("Current value of j: ", j);
- j = j + 1;
+    write("Current value of j: ", j);
+    j = j + 1;
 }
 
 write("Using the do-while loop:");
+
 let k = 0;
 do {
- write("Current value of k: ", k);
- k = k + 1;
+    write("Current value of k: ", k);
+    k = k + 1;
 } while (k < 5);
 ```
 

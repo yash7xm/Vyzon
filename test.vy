@@ -1,18 +1,9 @@
-write("Using the for loop:");
-for (let i=0; i<10; i+=1) {
- write("Current value of i: ", i);
-}
+let x = 10;
 
-write("Using the while loop:");
-let j = 0;
-while (j < 5) {
- write("Current value of j: ", j);
- j = j + 1;
+if (x > 15) {
+    write("x is greater than 15");
+} elif (x > 5) {
+    write("x is greater than 5 but not greater than 15");
+} else {
+    write("x is not greater than 5");
 }
-
-write("Using the do-while loop:");
-let k = 0;
-do {
- write("Current value of k: ", k);
- k = k + 1;
-} while (k < 5);
