@@ -1,6 +1,6 @@
 {
     "name": "vyzon",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A modern programming language inspired by Python, JavaScript, and Ruby.",
     "main": "vyzon.js",
     "bin": {
@@ -23,6 +23,6 @@
     "bugs": {
         "url": "https://github.com/yash7xm/Vyzon/issues"
     },
-    "homepage": "https://github.com/useryash7xmname/Vyzon#readme",
+    "homepage": "https://github.com/yash7xm/Vyzon#readme",
     "dependencies": {}
 }

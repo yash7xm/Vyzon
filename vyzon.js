@@ -48,21 +48,38 @@ class Interpreter {
     }
 
     ImportStatement(node) {
-        const name = node.name.name;
         const parser = new Parser();
         const fs = require("fs");
         const path = require("path");
 
-        const filePath = path.join(__dirname, "modules", `${name}.vy`);
+        const moduleName = node.name.name;
+
+        const searchDirectories = [
+            path.join(__dirname, "modules"),
+            process.cwd(),
+        ];
+
+        let fullPath = null;
+
+        for (const dir of searchDirectories) {
+            const potentialPath = path.join(dir, `${moduleName}.vy`);
+            if (fs.existsSync(potentialPath)) {
+                fullPath = potentialPath;
+                break;
+            }
+        }
+
+        if (!fullPath) {
+            console.error(`Error: Module '${moduleName}' not found.`);
+            return;
+        }
 
         try {
-            const code = fs.readFileSync(filePath, "utf-8");
-
+            const code = fs.readFileSync(fullPath, "utf-8");
             const ast = parser.parse(code);
-
             this.interpret(ast.body);
         } catch (readErr) {
-            console.error(`Error reading ${filePath}:`, readErr);
+            console.error(`Error reading ${fullPath}:`, readErr);
         }
     }
 
