@@ -2,7 +2,7 @@
 
 Vyzon is a modern programming language inspired by the elegance of Python, the flexibility of JavaScript, and the expressiveness of Ruby. It is designed with a primary focus on readability and simplicity while maintaining powerful functionality.
  
-## Usage
+## Installation
 
 To use Vyzon locally, follow these steps:
 
@@ -11,10 +11,23 @@ To use Vyzon locally, follow these steps:
    git clone https://github.com/yash7xm/Vyzon.git
    `
 2. **Change your current directory** to the cloned repository: ` cd Vyzon `
- 
-4. **Create a new Vyzon file** with your code in the main directory. Name the file with a .Vyzon extension, for example, yourfile.Vyzon.
+
+3. **Make the Vyzon script executable by running the following command:** `chmod +x bin/vyzon`
+
+## Usage
+
+  # Running a Vyzon Script from a File
+  1. **Create a new Vyzon file** with your code in the main directory. Name the file with a .vy extension, for example:
+    `yourfile.vy`
   
-6. To **run your Vyzon code**, execute the following command in your terminal: ` node run.js `
+  2. **To run your Vyzon script**, execute the following command in your terminal:
+    `bin/vyzon -f yourfile.vy`
+    This will parse and interpret the contents of yourfile.vy.
+ 
+  # Running an Expression Directly
+  1. You can also run an expression directly from the command line by using the `-e` flag:
+    `bin/vyzon -e "2 + 2"`
+    This will parse and evaluate the expression `2 + 2`.
 
 # Documentation
 

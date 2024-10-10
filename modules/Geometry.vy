@@ -1,7 +1,7 @@
 import Math;
 
 def Circle(radius) {
-    return PI * radius * radius;
+    return Math.PI * radius * radius;
 }
 
 class Point {
