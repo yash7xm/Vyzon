@@ -1,9 +1,13 @@
-let x = 10;
+class Person {
+  def constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
 
-if (x > 15) {
-    write("x is greater than 15");
-} elif (x > 5) {
-    write("x is greater than 5 but not greater than 15");
-} else {
-    write("x is not greater than 5");
+  def greet() {
+    write("Hello, my name is " + this.name + " and I am " + this.age + " years old.");
+  }
 }
+
+let person1 = new Person("Yash", 22);
+person1.greet();
