@@ -4,10 +4,17 @@ Vyzon is a modern programming language inspired by the elegance of Python, the f
 
 ## Installation
 
+Using npm:
+
+```
+$ npm i vyzon
+```
+
 To use Vyzon locally, follow these steps:
 
 1. **Clone the repository** to your local machine using Git:
    `git clone https://github.com/yash7xm/Vyzon.git`
+
 2. **Change your current directory** to the cloned repository: `cd Vyzon`
 
 3. **Make the Vyzon script executable by running the following command:** `chmod +x bin/vyzon`
