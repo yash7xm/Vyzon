@@ -14,90 +14,87 @@ const Spec = [
 
     // --------------------------------------
     // Symbols and delimiters:
-    [/^;/, ';'],  // Semicolon
-    [/^{/, '{'],  // LeftBrace
-    [/^}/, '}'],  // RightBrace
-    [/^\(/, '('], // LeftParen
-    [/^\)/, ')'], // RightParen
-    [/^\[/, '['], // LeftBracket
-    [/^\]/, ']'], // RightBracket
-    [/^,/, ','],  // Comma
-    [/^\./, '.'], // Dot
-    [/^\?/, '?'], // Question Mark
-    [/^:/, ':'],   // Colon
-
+    [/^;/, ";"], // Semicolon
+    [/^{/, "{"], // LeftBrace
+    [/^}/, "}"], // RightBrace
+    [/^\(/, "("], // LeftParen
+    [/^\)/, ")"], // RightParen
+    [/^\[/, "["], // LeftBracket
+    [/^\]/, "]"], // RightBracket
+    [/^,/, ","], // Comma
+    [/^\./, "."], // Dot
+    [/^\?/, "?"], // Question Mark
+    [/^:/, ":"], // Colon
 
     // Relational Operators
     // <, >, <=, >=
-    [/^[<>]=?/, 'RELATIONAL_OPERATOR'],
-    [/^[=!]=/, 'EQUALITY_OPERATOR'],
+    [/^[<>]=?/, "RELATIONAL_OPERATOR"],
+    [/^[=!]=/, "EQUALITY_OPERATOR"],
 
     // Logical Operators
     // ||, &&, !
-    [/^&&/, 'LOGICAL_AND'],
-    [/^\|\|/, 'LOGICAL_OR'],
-    [/^!/, 'LOGICAL_NOT'],
-
+    [/^&&/, "LOGICAL_AND"],
+    [/^\|\|/, "LOGICAL_OR"],
+    [/^!/, "LOGICAL_NOT"],
 
     // --------------------------------------
     // Keywords
-    [/^\blet\b/, 'let'],
-    [/^\bif\b/, 'if'],
-    [/^\belif\b/, 'elif'],
-    [/^\belse\b/, 'else'],
-    [/^\btrue\b/, 'true'],
-    [/^\bfalse\b/, 'false'],
-    [/^\bnull\b/, 'null'],
+    [/^\blet\b/, "let"],
+    [/^\bif\b/, "if"],
+    [/^\belif\b/, "elif"],
+    [/^\belse\b/, "else"],
+    [/^\btrue\b/, "true"],
+    [/^\bfalse\b/, "false"],
+    [/^\bnull\b/, "null"],
 
     // --------------------------------------
     // OOP keywords
-    [/^\bclass\b/, 'class'],
-    [/^\bthis\b/, 'this'],
-    [/^\bextends\b/, 'extends'],
-    [/^\bsuper\b/, 'super'],
-    [/^\bnew\b/, 'new'],
-    [/^\bmodule\b/, 'module'],
-    [/^\bimport\b/, 'import'],
+    [/^\bclass\b/, "class"],
+    [/^\bthis\b/, "this"],
+    [/^\bextends\b/, "extends"],
+    [/^\bsuper\b/, "super"],
+    [/^\bnew\b/, "new"],
+    [/^\bmodule\b/, "module"],
+    [/^\bimport\b/, "import"],
 
     // --------------------------------------
     // Iterators
-    [/^\bwhile\b/, 'while'],
-    [/^\bdo\b/, 'do'],
-    [/^\bfor\b/, 'for'],
+    [/^\bwhile\b/, "while"],
+    [/^\bdo\b/, "do"],
+    [/^\bfor\b/, "for"],
 
-    [/^\bdef\b/, 'def'],
-    [/^\breturn\b/, 'return'],
+    [/^\bdef\b/, "def"],
+    [/^\breturn\b/, "return"],
 
     // --------------------------------------
     // Assignment operators: =, *=, /=, +=, -=
-    [/^=/, 'SIMPLE_ASSIGN'],
-    [/^[\*\\/\+\-]=/, 'COMPLEX_ASSIGN'],
+    [/^=/, "SIMPLE_ASSIGN"],
+    [/^[\*\\/\+\-]=/, "COMPLEX_ASSIGN"],
 
     // --------------------------------------
     // Math operators: +, -, *, /, %
-    [/^[+\-]/, 'ADDITIVE_OPERATOR'],
-    [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
-    [/^%/, 'MODULO_OPERATOR'],
+    [/^[+\-]/, "ADDITIVE_OPERATOR"],
+    [/^[*\/]/, "MULTIPLICATIVE_OPERATOR"],
+    [/^%/, "MODULO_OPERATOR"],
 
     // --------------------------------------
     // Numbers:
-    [/^\d+/, 'NUMBER'],
+    [/^\d+/, "NUMBER"],
 
     // --------------------------------------
     // Double quoted String:
-    [/^"[^"]*"/, 'STRING'],
+    [/^"[^"]*"/, "STRING"],
 
     // --------------------------------------
     // Single quoted String:
-    [/^'[^']*'/, 'STRING'],
+    [/^'[^']*'/, "STRING"],
 
     // --------------------------------------
     // Identifier
-    [/^\w+/, 'IDENTIFIER'],
+    [/^\w+/, "IDENTIFIER"],
 ];
 
 class Tokenizer {
-
     init(string) {
         this._string = string;
         this._cursor = 0;
@@ -127,9 +124,8 @@ class Tokenizer {
 
             return {
                 type: tokenType,
-                value: tokenValue
-            }
-
+                value: tokenValue,
+            };
         }
     }
 
@@ -144,4 +140,4 @@ class Tokenizer {
     }
 }
 
-module.exports = { Tokenizer }
+module.exports = { Tokenizer };

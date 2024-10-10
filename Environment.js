@@ -1,5 +1,4 @@
- class Environment {
-
+class Environment {
     constructor(record = {}, parent = null) {
         this.record = record;
         this.parent = parent;
@@ -20,16 +19,16 @@
     }
 
     resolve(name) {
-        if(this.record.hasOwnProperty(name)){
+        if (this.record.hasOwnProperty(name)) {
             return this;
         }
 
-        if(this.parent == null) {
+        if (this.parent == null) {
             throw new ReferenceError(`Variable "${name}" is not defined.`);
         }
 
         return this.parent.resolve(name);
     }
- }
+}
 
- module.exports = Environment;
+module.exports = Environment;
