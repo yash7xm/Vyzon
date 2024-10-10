@@ -1,4 +1,4 @@
-def abs(x) {
+def Abs(x) {
     if(x < 0) {
         return x*-1;
     } else {
@@ -6,7 +6,7 @@ def abs(x) {
     }
 }
 
-def square(x) {
+def Square(x) {
     return x*x;
 }
 

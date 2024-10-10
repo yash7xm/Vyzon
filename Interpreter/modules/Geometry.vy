@@ -12,7 +12,20 @@ class Point {
         this.y = y;
     }
 
-    def showPoints() {
+    def ShowPoints() {
         write(this.x, this.y);
+    }
+}
+
+class Point3D extends Point {
+    let z;
+
+    def constructor(x, y, z) {
+        super(x, y);
+        this.z = z;
+    }
+
+    def ShowPoints() {
+        write(this.x, this.y, this.z);
     }
 }
