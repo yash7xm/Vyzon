@@ -41,7 +41,14 @@ class Interpreter {
                 return this.ReturnStatement(node, env);
             case 'ClassDeclaration':
                 return this.ClassDeclaration(node, env);
+            case 'ModuleDeclaration':
+                return this.ModuleDeclaration(node, env);
         }
+    }
+
+    ModuleDeclaration(node, env) {
+        console.log(node);
+        console.log(env);
     }
 
     ClassDeclaration(node, env) {

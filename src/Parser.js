@@ -52,8 +52,22 @@ class Parser {
             case 'do':
             case 'for':
                 return this.IterationStatement();
+            case 'module':
+                return this.ModuleStatement();
             default:
                 return this.ExpressionStatement();
+        }
+    }
+
+    ModuleStatement() {
+        this._eat('module');
+        const name = this.Identifier();
+        const body = this.BlockStatement();
+
+        return {
+            type: 'ModuleDeclaration',
+            name,
+            body
         }
     }
 
