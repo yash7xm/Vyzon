@@ -47,8 +47,11 @@ class Interpreter {
     }
 
     ModuleDeclaration(node, env) {
-        console.log(node);
-        console.log(env);
+        const moduleEnv = new Environment({}, env);
+
+        this.StatementList(node.body.body, moduleEnv);
+
+        return env.define(node.name.name, moduleEnv);
     }
 
     ClassDeclaration(node, env) {
