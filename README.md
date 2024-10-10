@@ -70,24 +70,6 @@ write("abc");
 write("write anything: ", a);
 ```
 
-### String Operations
-
-Vyzon provides string manipulation capabilities:
-
--   **`.length` Property**: To find the length of a string, use the .length property. For example:
-
-```
-let a = 'abcd';
-write(a.length); // This will print the length of the string.
-```
-
--   **String Indexing**: You can access individual characters within a string using square brackets. For instance:
-
-```
-let a = 'abcd';
-write(a[0]); // This will print the first character 'a'.
-```
-
 ## Conditionals
 
 Vyzon supports conditional statements for decision-making in your code. You can use the `if`, `elif`, and `else` statements to execute different blocks of code based on specific conditions. Here's an example:
@@ -152,7 +134,7 @@ greet("Yash"); // Calls the greet function with "Alice" as an argument.
 -   **Assignment operators:**
     -   Assignment operators are the same as in other programming languages. Ex: `=, +=, -=, *=, /=`
 
-### Classes and Objects
+## Classes and Objects
 
 Vyzon supports Object-Oriented Programming (OOP) with classes and objects.
 
@@ -179,7 +161,7 @@ person1.greet();
 **Creating an Object:**
 You can create an object from a class using the `new` keyword. Once an object is created, you can access its methods and properties.
 
-### Inheritance
+## Inheritance
 
 Vyzon allows you to extend classes through inheritance using the `extends` keyword. This allows a new class to inherit the properties and methods of an existing class.
 
@@ -208,7 +190,7 @@ let dog = new Dog("Buddy");
 dog.speak();
 ```
 
-### Super
+## Super
 
 The `super` keyword is used to call the constructor of the parent class and access parent methods from a child class.
 
@@ -229,7 +211,7 @@ class Child extends Parent {
 let child = new Child();
 ```
 
-### Modules
+## Modules
 
 Modules in Vyzon allow you to organize and reuse code by grouping related functions or classes together. You can define a module using the `module` keyword.
 
@@ -251,7 +233,7 @@ To use a function from the `Math` module:
 write(Math.Abs(-10));  // Output: 10
 ```
 
-### Importing Modules
+## Importing Modules
 
 You can import modules into your Vyzon script using the `import` statement. This allows you to reuse code from external modules.
 
