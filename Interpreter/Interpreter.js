@@ -180,34 +180,75 @@ class Interpreter {
     }
 
     CallExpression(node, env) {
-        if (node.calle.type === 'MemberExpression') {
-            let object = this.Expression(node.calle.object, env);
-            let method = object.lookup(node.calle.property.name);
-    
-            let args = node.arguments.map(arg => this.Expression(arg, env));
-            let params = method.params.map(param => param.name);
-    
-            const activationRecord = {};
-            params.forEach((param, index) => {
-                activationRecord[param] = args[index];
-            });
-    
-            activationRecord['this'] = object;
-    
-            const activationEnv = new Environment(activationRecord, method.env);
-    
-            return this.Statement(method.body, activationEnv);
+        switch (node.calle.type) {
+            case 'MemberExpression':
+                return this._callMemberExpression(node, env);
+            case 'Super':
+                return this._callSuperExpression(node, env);
+            default:
+                return this._normalCallExpression(node, env);
         }
-
-        return this._normalCallExpression(node, env);
     }
+
+    _callMemberExpression(node, env) {
+        let object = this.Expression(node.calle.object, env);
+        let method = object.lookup(node.calle.property.name);
+
+        let args = node.arguments.map(arg => this.Expression(arg, env));
+        let params = method.params.map(param => param.name);
+
+        const activationRecord = {};
+        params.forEach((param, index) => {
+            activationRecord[param] = args[index];
+        });
+
+        activationRecord['this'] = object;
+
+        const activationEnv = new Environment(activationRecord, method.env);
+
+        return this.Statement(method.body, activationEnv);
+    }
+
+    _callSuperExpression(node, env) {
+
+        const instanceEnv = env.lookup('this');
+        
+        const superEnv = instanceEnv.parent.parent;
+    
+        if (!superEnv) {
+            throw new ReferenceError(`Superclass environment not found.`);
+        }
+    
+        const constructor = superEnv.lookup('constructor');
+        
+        if (!constructor) {
+            throw new ReferenceError(`Superclass constructor not found.`);
+        }
+    
+        const args = node.arguments.map((arg) => this.Expression(arg, env));
+    
+        const params = constructor.params.map(param => param.name);
+    
+        const activationRecord = {};
+        params.forEach((param, index) => {
+            activationRecord[param] = args[index];
+        });
+    
+        activationRecord['this'] = instanceEnv;
+    
+        const activationEnv = new Environment(activationRecord, constructor.env);
+    
+        return this.Statement(constructor.body, activationEnv);
+    }
+    
+    
     
     _normalCallExpression(node, env) {
         if (node.calle.name === 'write') {
             return this._callWriteExpression(node, env);
         }
 
-        let fn = env.lookup(node.callee.name);
+        let fn = env.lookup(node.calle.name);
         let args = node.arguments.map((args) => this.Expression(args, env));
         let params = fn.params.map((param) => param.name);
 

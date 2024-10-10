@@ -1,23 +1,24 @@
-class Animal {
-    let name;
+class Point {
+    let x, y;
 
-    def constructor(name) {
-        this.name = name;
-    }
-
-    def showName() {
-        write(this.name);
+    def constructor(x, y) {
+        this.x = x;
+        this.y = y;
     }
 }
 
-class Monkey extends Animal {
-    def sound() {
-        write("Monkey");
+class Point3D extends Point {
+    let z;
+
+    def constructor(x, y, z) {
+        super(x,y);
+        this.z = z;
+    }
+
+    def sum() {
+        write(this.x + this.y + this.z);
     }
 }
 
-class Lion extends Animal {
-    def sound() {
-        write("Lion");
-    }
-}
+let point = new Point3D(10,20,30);
+point.sum();
