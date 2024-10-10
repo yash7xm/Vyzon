@@ -54,8 +54,20 @@ class Parser {
                 return this.IterationStatement();
             case 'module':
                 return this.ModuleStatement();
+            case 'import':
+                return this.ImportStatement();
             default:
                 return this.ExpressionStatement();
+        }
+    }
+
+    ImportStatement() {
+        this._eat('import');
+        const name = this.Identifier();
+
+        return {
+            type: 'ImportStatement',
+            name
         }
     }
 

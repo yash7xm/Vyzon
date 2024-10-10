@@ -43,7 +43,14 @@ class Interpreter {
                 return this.ClassDeclaration(node, env);
             case 'ModuleDeclaration':
                 return this.ModuleDeclaration(node, env);
+            case 'ImportStatement':
+                return this.ImportStatement(node, env);
         }
+    }
+
+    ImportStatement(node, env) {
+        console.log(node);
+        console.log(env);
     }
 
     ModuleDeclaration(node, env) {

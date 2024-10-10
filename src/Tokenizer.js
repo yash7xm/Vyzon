@@ -57,6 +57,7 @@ const Spec = [
     [/^\bsuper\b/, 'super'],
     [/^\bnew\b/, 'new'],
     [/^\bmodule\b/, 'module'],
+    [/^\bimport\b/, 'import'],
 
     // --------------------------------------
     // Iterators
