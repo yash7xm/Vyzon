@@ -4,9 +4,13 @@ const assert = require("node:assert/strict");
 const { parse } = require("./helpers/runtime.js");
 
 test("Parser supports an empty program", () => {
-    assert.deepEqual(parse(""), {
-        type: "Program",
-        body: [],
+    const program = parse("");
+
+    assert.equal(program.type, "Program");
+    assert.deepEqual(program.body, []);
+    assert.deepEqual(program.loc, {
+        start: { line: 1, column: 1, offset: 0 },
+        end: { line: 1, column: 1, offset: 0 },
     });
 });
 
@@ -44,4 +48,32 @@ test("Parser preserves new expressions", () => {
     assert.equal(declaration.init.type, "NewExpression");
     assert.equal(declaration.init.callee.name, "Point");
     assert.equal(declaration.init.arguments.length, 2);
+    assert.deepEqual(declaration.init.loc.start, {
+        line: 1,
+        column: 13,
+        offset: 12,
+    });
+});
+
+test("Parser attaches source locations to statements", () => {
+    const statement = parse("let value = 10;\nwrite(value);").body[1];
+
+    assert.deepEqual(statement.loc, {
+        start: { line: 2, column: 1, offset: 16 },
+        end: { line: 2, column: 14, offset: 29 },
+    });
+});
+
+test("Parser errors include line and column information", () => {
+    assert.throws(
+        () => parse("let a = ;"),
+        /Unexpected primary expression at line 1, column 9/
+    );
+});
+
+test("Parser reports incomplete call expressions cleanly", () => {
+    assert.throws(
+        () => parse("write("),
+        /Unexpected end of input, expected: "\)" at line 1, column 7/
+    );
 });

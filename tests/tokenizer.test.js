@@ -24,11 +24,19 @@ test("Tokenizer skips whitespace and comments", () => {
         tokens.map((token) => token.type),
         ["let", "IDENTIFIER", "SIMPLE_ASSIGN", "NUMBER", ";", "IDENTIFIER", "(", "IDENTIFIER", ")", ";"]
     );
+    assert.deepEqual(tokens[0].loc.start, {
+        line: 3,
+        column: 9,
+        offset: 32,
+    });
 });
 
 test("Tokenizer throws a syntax error for unknown characters", () => {
     const tokenizer = new Tokenizer();
     tokenizer.init("@");
 
-    assert.throws(() => tokenizer.getNextToken(), /Unexpected token: "@"/);
+    assert.throws(
+        () => tokenizer.getNextToken(),
+        /Unexpected token: "@" at line 1, column 1/
+    );
 });

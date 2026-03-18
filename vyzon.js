@@ -87,8 +87,10 @@ class Interpreter {
         }
 
         if (!fullPath) {
-            console.error(`Error: Module '${moduleName}' not found.`);
-            return;
+            throw this._runtimeError(
+                `Module '${moduleName}' not found.`,
+                node
+            );
         }
 
         try {
@@ -96,7 +98,10 @@ class Interpreter {
             const ast = parser.parse(code);
             this.interpret(ast.body);
         } catch (readErr) {
-            console.error(`Error reading ${fullPath}:`, readErr);
+            throw this._runtimeError(
+                `Error reading ${fullPath}: ${readErr.message}`,
+                node
+            );
         }
     }
 
@@ -324,7 +329,12 @@ class Interpreter {
             return this._callWriteExpression(node, env);
         }
 
-        let fn = env.lookup(node.calle.name);
+        let fn;
+        try {
+            fn = env.lookup(node.calle.name);
+        } catch (error) {
+            throw this._runtimeError(error.message, node.calle);
+        }
         let args = node.arguments.map((args) => this.Expression(args, env));
         let params = fn.params.map((param) => param.name);
 
@@ -345,11 +355,21 @@ class Interpreter {
     }
 
     NewExpression(node, env) {
-        let classEnv = env.lookup(node.callee.name);
+        let classEnv;
+        try {
+            classEnv = env.lookup(node.callee.name);
+        } catch (error) {
+            throw this._runtimeError(error.message, node.callee);
+        }
 
         let instanceEnv = new Environment({}, classEnv);
 
-        let constructor = classEnv.lookup("constructor");
+        let constructor;
+        try {
+            constructor = classEnv.lookup("constructor");
+        } catch (error) {
+            throw this._runtimeError(error.message, node);
+        }
         if (constructor) {
             let args = node.arguments.map((arg) => this.Expression(arg, env));
             let params = constructor.params.map((param) => param.name);
@@ -496,7 +516,11 @@ class Interpreter {
 
         const varName = node.left.name;
         const value = this.Expression(node.right, env);
-        env.assign(varName, value);
+        try {
+            env.assign(varName, value);
+        } catch (error) {
+            throw this._runtimeError(error.message, node.left);
+        }
         return value;
     }
 
@@ -504,7 +528,12 @@ class Interpreter {
         let left = node.left.name;
         let right = this.Expression(node.right, env);
         const operator = node.operator[0];
-        const leftValue = env.lookup(left);
+        let leftValue;
+        try {
+            leftValue = env.lookup(left);
+        } catch (error) {
+            throw this._runtimeError(error.message, node.left);
+        }
 
         if (
             typeof right === "string" &&
@@ -529,12 +558,20 @@ class Interpreter {
                 break;
         }
 
-        env.assign(left, right);
+        try {
+            env.assign(left, right);
+        } catch (error) {
+            throw this._runtimeError(error.message, node.left);
+        }
         return;
     }
 
     Identifier(node, env) {
-        return env.lookup(node.name);
+        try {
+            return env.lookup(node.name);
+        } catch (error) {
+            throw this._runtimeError(error.message, node);
+        }
     }
 
     NumericLiteral(node) {
@@ -551,6 +588,13 @@ class Interpreter {
 
     NullLiteral(node) {
         return node.value;
+    }
+
+    _runtimeError(message, node) {
+        const suffix = node && node.loc
+            ? ` at line ${node.loc.start.line}, column ${node.loc.start.column}`
+            : "";
+        return new ReferenceError(`${message}${suffix}`);
     }
 }
 

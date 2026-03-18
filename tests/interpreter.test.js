@@ -63,3 +63,10 @@ test("Interpreter instances do not share global variables between runs", () => {
         /Variable "a" is not defined/
     );
 });
+
+test("Interpreter errors include source locations", () => {
+    assert.throws(
+        () => interpret("write(a);"),
+        /Variable "a" is not defined\. at line 1, column 7/
+    );
+});

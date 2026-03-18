@@ -1,7 +1,7 @@
-def f() { 
-    write(1); 
-    return 2; 
-    write(3); 
+def sums(a, b, c) {
+  retrn a + b + c;
 }
 
-f();
+let a = sum(1, 2, 3) + sum(1, 2, 3);
+
+write(sum(1, 2, 3) + sum(1, 2, 3));

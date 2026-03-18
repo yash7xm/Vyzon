@@ -98,6 +98,8 @@ class Tokenizer {
     init(string) {
         this._string = string;
         this._cursor = 0;
+        this._line = 1;
+        this._column = 1;
     }
 
     isEOF() {
@@ -112,6 +114,7 @@ class Tokenizer {
         if (!this.hasMoreTokens()) return null;
 
         const string = this._string.slice(this._cursor);
+        const start = this._getLocation();
 
         for (const [regexp, tokenType] of Spec) {
             const tokenValue = this._match(regexp, string);
@@ -125,10 +128,16 @@ class Tokenizer {
             return {
                 type: tokenType,
                 value: tokenValue,
+                loc: {
+                    start,
+                    end: this._getLocation(),
+                },
             };
         }
 
-        throw new SyntaxError(`Unexpected token: "${string[0]}"`);
+        throw new SyntaxError(
+            `Unexpected token: "${string[0]}" at line ${start.line}, column ${start.column}`
+        );
     }
 
     _match(regexp, string) {
@@ -137,8 +146,28 @@ class Tokenizer {
         if (matched == null) return null;
 
         this._cursor += matched[0].length;
+        this._advancePosition(matched[0]);
 
         return matched[0];
+    }
+
+    _advancePosition(value) {
+        for (const char of value) {
+            if (char === "\n") {
+                this._line += 1;
+                this._column = 1;
+            } else {
+                this._column += 1;
+            }
+        }
+    }
+
+    _getLocation() {
+        return {
+            line: this._line,
+            column: this._column,
+            offset: this._cursor,
+        };
     }
 }
 

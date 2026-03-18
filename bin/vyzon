@@ -24,8 +24,17 @@ function main(argv) {
     }
 }
 
-if (require.main === module) {
-    main(process.argv);
+function run(argv) {
+    try {
+        return main(argv);
+    } catch (error) {
+        console.error(error.message);
+        process.exitCode = 1;
+    }
 }
 
-module.exports = { main };
+if (require.main === module) {
+    run(process.argv);
+}
+
+module.exports = { main, run };

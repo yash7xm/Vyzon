@@ -4,6 +4,8 @@ class Parser {
     constructor() {
         this._string = "";
         this._tokenizer = new Tokenizer();
+        this._lookahead = null;
+        this._prevToken = null;
     }
 
     parse(string) {
@@ -11,15 +13,23 @@ class Parser {
         this._tokenizer.init(this._string);
 
         this._lookahead = this._tokenizer.getNextToken();
+        this._prevToken = null;
 
         return this.Program();
     }
 
     Program() {
-        return {
-            type: "Program",
-            body: this.StatementList(),
-        };
+        const start = this._lookahead ? this._lookahead : { line: 1, column: 1, offset: 0 };
+        const body = this.StatementList();
+
+        return this._node(
+            start,
+            {
+                type: "Program",
+                body,
+            },
+            this._prevToken ?? start
+        );
     }
 
     StatementList(stopLookAhead = null) {
@@ -44,6 +54,10 @@ class Parser {
     }
 
     Statement() {
+        if (this._lookahead == null) {
+            throw this._syntaxError("Unexpected end of input", this._prevToken);
+        }
+
         switch (this._lookahead.type) {
             case "{":
                 return this.BlockStatement();
@@ -73,43 +87,47 @@ class Parser {
     }
 
     ImportStatement() {
+        const startToken = this._lookahead;
         this._eat("import");
         const name = this.Identifier();
 
-        return {
+        return this._node(startToken, {
             type: "ImportStatement",
             name,
-        };
+        });
     }
 
     ModuleStatement() {
+        const startToken = this._lookahead;
         this._eat("module");
         const name = this.Identifier();
         const body = this.BlockStatement();
 
-        return {
+        return this._node(startToken, {
             type: "ModuleDeclaration",
             name,
             body,
-        };
+        });
     }
 
     BlockStatement() {
+        const startToken = this._lookahead;
         this._eat("{");
         const body =
             this._lookahead.type !== "}" ? this.StatementList("}") : [];
         this._eat("}");
-        return {
+        return this._node(startToken, {
             type: "BlockStatement",
             body,
-        };
+        });
     }
 
     EmptyStatement() {
+        const startToken = this._lookahead;
         this._eat(";");
-        return {
+        return this._node(startToken, {
             type: "EmptyStatement",
-        };
+        });
     }
 
     VariableStatement() {
@@ -120,13 +138,14 @@ class Parser {
     }
 
     VariableStatementInit() {
+        const startToken = this._lookahead;
         this._eat("let");
         const declarations = this.VariableDeclarationList();
 
-        return {
+        return this._node(startToken, {
             type: "VariableStatement",
             declarations,
-        };
+        });
     }
 
     VariableDeclarationList() {
@@ -140,6 +159,7 @@ class Parser {
     }
 
     VariableDeclaration() {
+        const startToken = this._lookahead;
         const id = this.Identifier();
 
         const init =
@@ -147,11 +167,11 @@ class Parser {
                 ? this.VariableInitilizer()
                 : null;
 
-        return {
+        return this._node(startToken, {
             type: "VariableDeclaration",
             id,
             init,
-        };
+        });
     }
 
     VariableInitilizer() {
@@ -182,6 +202,7 @@ class Parser {
     // }
 
     IfStatement() {
+        const startToken = this._lookahead;
         this._eat("if");
         this._eat("(");
         const test = this.Expression();
@@ -193,15 +214,19 @@ class Parser {
         alternate =
             this._lookahead != null ? this._CheckElifOrElseStatement() : null;
 
-        return {
+        return this._node(startToken, {
             type: "IfStatement",
             test,
             consequent,
             alternate,
-        };
+        });
     }
 
     _CheckElifOrElseStatement() {
+        if (this._lookahead == null) {
+            return null;
+        }
+
         switch (this._lookahead.type) {
             case "elif":
                 return this.ElifStatement();
@@ -213,6 +238,7 @@ class Parser {
     }
 
     ElifStatement() {
+        const startToken = this._lookahead;
         this._eat("elif");
         this._eat("(");
         const test = this.Expression();
@@ -223,12 +249,12 @@ class Parser {
         alternate =
             this._lookahead != null ? this._CheckElifOrElseStatement() : null;
 
-        return {
+        return this._node(startToken, {
             type: "IfStatement",
             test,
             consequent,
             alternate,
-        };
+        });
     }
 
     ElseStatement() {
@@ -237,6 +263,10 @@ class Parser {
     }
 
     IterationStatement() {
+        if (this._lookahead == null) {
+            return null;
+        }
+
         switch (this._lookahead.type) {
             case "while":
                 return this.WhileStatement();
@@ -250,20 +280,22 @@ class Parser {
     }
 
     WhileStatement() {
+        const startToken = this._lookahead;
         this._eat("while");
         this._eat("(");
         let test = this.Expression();
         this._eat(")");
         let body = this.Statement();
 
-        return {
+        return this._node(startToken, {
             type: "WhileStatement",
             test,
             body,
-        };
+        });
     }
 
     DoWhileStatement() {
+        const startToken = this._lookahead;
         this._eat("do");
         let body = this.Statement();
         this._eat("while");
@@ -272,14 +304,15 @@ class Parser {
         this._eat(")");
         this._eat(";");
 
-        return {
+        return this._node(startToken, {
             type: "DoWhileStatement",
             body,
             test,
-        };
+        });
     }
 
     ForStatement() {
+        const startToken = this._lookahead;
         this._eat("for");
         this._eat("(");
 
@@ -295,13 +328,13 @@ class Parser {
 
         let body = this.Statement();
 
-        return {
+        return this._node(startToken, {
             type: "ForStatement",
             init,
             test,
             update,
             body,
-        };
+        });
     }
 
     InitForStatement() {
@@ -312,6 +345,7 @@ class Parser {
     }
 
     FucntionDeclaration() {
+        const startToken = this._lookahead;
         this._eat("def");
         const name = this.Identifier();
 
@@ -322,12 +356,12 @@ class Parser {
 
         const body = this.BlockStatement();
 
-        return {
+        return this._node(startToken, {
             type: "FunctionDeclaration",
             name,
             params,
             body,
-        };
+        });
     }
 
     FormalParameterList() {
@@ -340,16 +374,18 @@ class Parser {
     }
 
     ReturnStatement() {
+        const startToken = this._lookahead;
         this._eat("return");
         let argument = this._lookahead.type !== ";" ? this.Expression() : null;
         this._eat(";");
-        return {
+        return this._node(startToken, {
             type: "ReturnStatement",
             argument,
-        };
+        });
     }
 
     ClassDeclaration() {
+        const startToken = this._lookahead;
         this._eat("class");
         const id = this.Identifier();
 
@@ -358,12 +394,12 @@ class Parser {
 
         const body = this.BlockStatement();
 
-        return {
+        return this._node(startToken, {
             type: "ClassDeclaration",
             id,
             superClass,
             body,
-        };
+        });
     }
 
     ClassExtends() {
@@ -372,12 +408,13 @@ class Parser {
     }
 
     ExpressionStatement() {
+        const startToken = this._lookahead;
         const expression = this.Expression();
         this._eat(";");
-        return {
+        return this._node(startToken, {
             type: "ExpressionStatement",
             expression,
-        };
+        });
     }
 
     Expression() {
@@ -387,16 +424,19 @@ class Parser {
     AssignmentExpression() {
         let left = this.ConditionalExpression();
 
-        while (this._isAssignmentOperator(this._lookahead.type)) {
+        while (
+            this._lookahead != null &&
+            this._isAssignmentOperator(this._lookahead.type)
+        ) {
             const operator = this.AssignmentOperator().value;
             const right = this.AssignmentExpression();
 
-            return {
+            return this._nodeFromNodes(left, right, {
                 type: "AssignmentExpression",
                 operator,
                 left: this._checkValidAssignmentTarget(left),
                 right,
-            };
+            });
         }
 
         return left;
@@ -404,33 +444,33 @@ class Parser {
 
     ConditionalExpression() {
         let test = this.LogicalORExpression();
-        if (this._lookahead.type === "?") this._eat("?");
+        if (this._lookahead != null && this._lookahead.type === "?") this._eat("?");
         else return test;
         let consequent = this.Expression();
         this._eat(":");
         let alternate = this.Expression();
 
-        return {
+        return this._nodeFromNodes(test, alternate, {
             type: "ConditionalExpression",
             test,
             consequent,
             alternate,
-        };
+        });
     }
 
     LogicalORExpression() {
         let left = this.LogicalANDExpression();
 
-        while (this._lookahead.type === "LOGICAL_OR") {
+        while (this._lookahead != null && this._lookahead.type === "LOGICAL_OR") {
             const operator = this._eat("LOGICAL_OR").value;
             const right = this.LogicalANDExpression();
 
-            left = {
+            left = this._nodeFromNodes(left, right, {
                 type: "LogicalORExpression",
                 operator,
                 left,
                 right,
-            };
+            });
         }
 
         return left;
@@ -439,16 +479,16 @@ class Parser {
     LogicalANDExpression() {
         let left = this.EqualityExpression();
 
-        while (this._lookahead.type === "LOGICAL_AND") {
+        while (this._lookahead != null && this._lookahead.type === "LOGICAL_AND") {
             const operator = this._eat("LOGICAL_AND").value;
             const right = this.EqualityExpression();
 
-            left = {
+            left = this._nodeFromNodes(left, right, {
                 type: "LogicalANDExpression",
                 operator,
                 left,
                 right,
-            };
+            });
         }
 
         return left;
@@ -457,16 +497,19 @@ class Parser {
     EqualityExpression() {
         let left = this.RelationalExpression();
 
-        while (this._lookahead.type === "EQUALITY_OPERATOR") {
+        while (
+            this._lookahead != null &&
+            this._lookahead.type === "EQUALITY_OPERATOR"
+        ) {
             const operator = this._eat("EQUALITY_OPERATOR").value;
             const right = this.RelationalExpression();
 
-            left = {
+            left = this._nodeFromNodes(left, right, {
                 type: "BinaryExpression",
                 operator,
                 left,
                 right,
-            };
+            });
         }
 
         return left;
@@ -475,16 +518,19 @@ class Parser {
     RelationalExpression() {
         let left = this.AdditiveExpression();
 
-        while (this._lookahead.type == "RELATIONAL_OPERATOR") {
+        while (
+            this._lookahead != null &&
+            this._lookahead.type == "RELATIONAL_OPERATOR"
+        ) {
             const operator = this._eat("RELATIONAL_OPERATOR").value;
             const right = this.AdditiveExpression();
 
-            left = {
+            left = this._nodeFromNodes(left, right, {
                 type: "BinaryExpression",
                 operator,
                 left,
                 right,
-            };
+            });
         }
 
         return left;
@@ -493,15 +539,18 @@ class Parser {
     AdditiveExpression() {
         let left = this.ModuloExpreesion();
 
-        while (this._lookahead.type === "ADDITIVE_OPERATOR") {
+        while (
+            this._lookahead != null &&
+            this._lookahead.type === "ADDITIVE_OPERATOR"
+        ) {
             const operator = this._eat("ADDITIVE_OPERATOR").value;
             const right = this.ModuloExpreesion();
-            left = {
+            left = this._nodeFromNodes(left, right, {
                 type: "BinaryExpression",
                 operator,
                 left,
                 right,
-            };
+            });
         }
 
         return left;
@@ -510,15 +559,18 @@ class Parser {
     ModuloExpreesion() {
         let left = this.MultipicativeExpression();
 
-        while (this._lookahead.type === "MODULO_OPERATOR") {
+        while (
+            this._lookahead != null &&
+            this._lookahead.type === "MODULO_OPERATOR"
+        ) {
             const operator = this._eat("MODULO_OPERATOR").value;
             const right = this.MultipicativeExpression();
-            left = {
+            left = this._nodeFromNodes(left, right, {
                 type: "BinaryExpression",
                 operator,
                 left,
                 right,
-            };
+            });
         }
 
         return left;
@@ -527,15 +579,18 @@ class Parser {
     MultipicativeExpression() {
         let left = this.UnaryExpression();
 
-        while (this._lookahead.type === "MULTIPLICATIVE_OPERATOR") {
+        while (
+            this._lookahead != null &&
+            this._lookahead.type === "MULTIPLICATIVE_OPERATOR"
+        ) {
             const operator = this._eat("MULTIPLICATIVE_OPERATOR").value;
             const right = this.UnaryExpression();
-            left = {
+            left = this._nodeFromNodes(left, right, {
                 type: "BinaryExpression",
                 operator,
                 left,
                 right,
-            };
+            });
         }
 
         return left;
@@ -543,6 +598,10 @@ class Parser {
 
     UnaryExpression() {
         let operator;
+        if (this._lookahead == null) {
+            throw this._syntaxError("Unexpected end of input", this._prevToken);
+        }
+
         switch (this._lookahead.type) {
             case "ADDITIVE_OPERATOR":
                 operator = this._eat("ADDITIVE_OPERATOR").value;
@@ -553,11 +612,11 @@ class Parser {
         }
 
         if (operator != null) {
-            return {
+            return this._node(this._prevToken, {
                 type: "UnaryExpression",
                 operator,
                 argument: this.UnaryExpression(),
-            };
+            });
         }
 
         return this.LeftHandSideExpression();
@@ -568,13 +627,13 @@ class Parser {
     }
 
     CallMemberExpression() {
-        if (this._lookahead.type === "super") {
+        if (this._lookahead != null && this._lookahead.type === "super") {
             return this._CallExpression(this.Super());
         }
 
         const member = this.MemberExpression();
 
-        if (this._lookahead.type === "(") {
+        if (this._lookahead != null && this._lookahead.type === "(") {
             return this._CallExpression(member);
         }
 
@@ -582,13 +641,15 @@ class Parser {
     }
 
     _CallExpression(calle) {
-        let callExpression = {
+        let callExpression = this._nodeFromNodes(calle, calle, {
             type: "CallExpression",
             calle,
             arguments: this.Arguments(),
-        };
+        });
 
-        if (this._lookahead.type === "(") {
+        callExpression.loc.end = this._clonePosition(this._prevToken.loc.end);
+
+        if (this._lookahead != null && this._lookahead.type === "(") {
             callExpression = this._CallExpression(callExpression);
         }
 
@@ -598,7 +659,9 @@ class Parser {
     Arguments() {
         this._eat("(");
         const argumentList =
-            this._lookahead.type !== ")" ? this.ArgumentsList() : [];
+            this._lookahead != null && this._lookahead.type !== ")"
+                ? this.ArgumentsList()
+                : [];
         this._eat(")");
 
         return argumentList;
@@ -608,7 +671,11 @@ class Parser {
         const argumentList = [];
         do {
             argumentList.push(this.AssignmentExpression());
-        } while (this._lookahead.type === "," && this._eat(","));
+        } while (
+            this._lookahead != null &&
+            this._lookahead.type === "," &&
+            this._eat(",")
+        );
 
         return argumentList;
     }
@@ -616,26 +683,30 @@ class Parser {
     MemberExpression() {
         let object = this.PrimaryExpression();
 
-        while (this._lookahead.type === "." || this._lookahead.type === "[") {
+        while (
+            this._lookahead != null &&
+            (this._lookahead.type === "." || this._lookahead.type === "[")
+        ) {
             if (this._lookahead.type === ".") {
                 this._eat(".");
                 const property = this.Identifier();
-                object = {
+                object = this._nodeFromNodes(object, property, {
                     type: "MemberExpression",
                     computed: false,
                     object,
                     property,
-                };
+                });
             } else {
                 this._eat("[");
                 const property = this.Expression();
                 this._eat("]");
-                object = {
+                object = this._nodeFromNodes(object, property, {
                     type: "MemberExpression",
                     computed: true,
                     object,
                     property,
-                };
+                });
+                object.loc.end = this._clonePosition(this._prevToken.loc.end);
             }
         }
 
@@ -643,6 +714,10 @@ class Parser {
     }
 
     PrimaryExpression() {
+        if (this._lookahead == null) {
+            throw this._syntaxError("Unexpected end of input", this._prevToken);
+        }
+
         if (this._isLiteral(this._lookahead.type)) {
             return this.Literal();
         }
@@ -656,31 +731,35 @@ class Parser {
             case "new":
                 return this.NewExpression();
             default:
-                throw new SyntaxError(`Unexpected Primary Expression`);
+                throw this._syntaxError(
+                    `Unexpected primary expression`,
+                    this._lookahead
+                );
         }
     }
 
     ThisExpression() {
-        this._eat("this");
-        return {
+        const token = this._eat("this");
+        return this._node(token, {
             type: "ThisExpression",
-        };
+        });
     }
 
     Super() {
-        this._eat("super");
-        return {
+        const token = this._eat("super");
+        return this._node(token, {
             type: "Super",
-        };
+        });
     }
 
     NewExpression() {
+        const startToken = this._lookahead;
         this._eat("new");
-        return {
+        return this._node(startToken, {
             type: "NewExpression",
             callee: this.MemberExpression(),
             arguments: this.Arguments(),
-        };
+        });
     }
 
     ParethesizedExpression() {
@@ -695,7 +774,7 @@ class Parser {
     }
 
     AssignmentOperator() {
-        if (this._lookahead.type === "SIMPLE_ASSIGN") {
+        if (this._lookahead != null && this._lookahead.type === "SIMPLE_ASSIGN") {
             return this._eat("SIMPLE_ASSIGN");
         }
         return this._eat("COMPLEX_ASSIGN");
@@ -706,17 +785,18 @@ class Parser {
             return node;
         }
 
-        throw new SyntaxError(
-            "Invalid left-hand side in assignment expression"
+        throw this._syntaxError(
+            "Invalid left-hand side in assignment expression",
+            node
         );
     }
 
     Identifier() {
-        const name = this._eat("IDENTIFIER").value;
-        return {
+        const token = this._eat("IDENTIFIER");
+        return this._node(token, {
             type: "Identifier",
-            name,
-        };
+            name: token.value,
+        });
     }
 
     _isLiteral(tokenType) {
@@ -730,6 +810,10 @@ class Parser {
     }
 
     Literal() {
+        if (this._lookahead == null) {
+            throw this._syntaxError("Unexpected end of input", this._prevToken);
+        }
+
         switch (this._lookahead.type) {
             case "NUMBER":
                 return this.NumericLiteral();
@@ -742,59 +826,113 @@ class Parser {
             case "null":
                 return this.NullLiteral();
         }
-        throw new SyntaxError(`Literal: unexpected literal production.`);
+        throw this._syntaxError(
+            `Literal: unexpected literal production.`,
+            this._lookahead
+        );
     }
 
     NumericLiteral() {
         const token = this._eat("NUMBER");
-        return {
+        return this._node(token, {
             type: "NumericLiteral",
             value: Number(token.value),
-        };
+        });
     }
 
     StringLiteral() {
         const token = this._eat("STRING");
-        return {
+        return this._node(token, {
             type: "StringLiteral",
             value: token.value.slice(1, -1),
-        };
+        });
     }
 
     BooleanLiteral(value) {
-        this._eat(value ? "true" : "false");
-        return {
+        const token = this._eat(value ? "true" : "false");
+        return this._node(token, {
             type: "BooleanLiteral",
             value,
-        };
+        });
     }
 
     NullLiteral() {
-        this._eat("null");
-        return {
+        const token = this._eat("null");
+        return this._node(token, {
             type: "NullLiteral",
             value: null,
-        };
+        });
     }
 
     _eat(tokenType) {
         const token = this._lookahead;
 
         if (token == null) {
-            throw new SyntaxError(
-                `Unexpected end of input, expected: "${tokenType}"`
+            throw this._syntaxError(
+                `Unexpected end of input, expected: "${tokenType}"`,
+                this._prevToken ? this._prevToken.loc.end : null
             );
         }
 
         if (token.type !== tokenType) {
-            throw new SyntaxError(
-                `Unexpected token: "${token.value}", expected: "${tokenType}"`
+            throw this._syntaxError(
+                `Unexpected token: "${token.value}", expected: "${tokenType}"`,
+                token
             );
         }
 
         this._lookahead = this._tokenizer.getNextToken();
+        this._prevToken = token;
 
         return token;
+    }
+
+    _node(startTokenOrLoc, node, endTokenOrLoc = this._prevToken) {
+        return {
+            ...node,
+            loc: {
+                start: this._extractStart(startTokenOrLoc),
+                end: this._extractEnd(endTokenOrLoc ?? startTokenOrLoc),
+            },
+        };
+    }
+
+    _nodeFromNodes(startNode, endNode, node) {
+        return {
+            ...node,
+            loc: {
+                start: this._clonePosition(startNode.loc.start),
+                end: this._clonePosition(endNode.loc.end),
+            },
+        };
+    }
+
+    _extractStart(tokenOrLoc) {
+        const loc = tokenOrLoc && tokenOrLoc.loc ? tokenOrLoc.loc.start : tokenOrLoc;
+        return this._clonePosition(loc);
+    }
+
+    _extractEnd(tokenOrLoc) {
+        const loc = tokenOrLoc && tokenOrLoc.loc ? tokenOrLoc.loc.end : tokenOrLoc;
+        return this._clonePosition(loc);
+    }
+
+    _clonePosition(position) {
+        return position
+            ? {
+                  line: position.line,
+                  column: position.column,
+                  offset: position.offset,
+              }
+            : null;
+    }
+
+    _syntaxError(message, tokenOrLoc) {
+        const loc = tokenOrLoc && tokenOrLoc.loc ? tokenOrLoc.loc.start : tokenOrLoc;
+        const suffix = loc
+            ? ` at line ${loc.line}, column ${loc.column}`
+            : "";
+        return new SyntaxError(`${message}${suffix}`);
     }
 }
 
