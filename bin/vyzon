@@ -3,24 +3,143 @@
 "use strict";
 
 const fs = require("fs");
+const readline = require("readline");
 
 const { Parser } = require("../parser/Parser.js");
 const { Interpreter } = require("../vyzon.js");
 
+function createRuntime() {
+    return {
+        parser: new Parser(),
+        interpreter: new Interpreter(),
+    };
+}
+
+function executeSource(source, runtime = createRuntime()) {
+    const parsedExp = runtime.parser.parse(source).body;
+    return runtime.interpreter.interpret(parsedExp);
+}
+
+function executeFile(filepath, runtime = createRuntime()) {
+    const src = fs.readFileSync(filepath, "utf-8");
+    return executeSource(src, runtime);
+}
+
+function formatReplResult(result) {
+    if (result === undefined || result === null) {
+        return null;
+    }
+
+    if (typeof result === "object") {
+        return null;
+    }
+
+    return String(result);
+}
+
+function createReplSession(io = {}) {
+    const runtime = createRuntime();
+    const log = io.log ?? ((message) => console.log(message));
+    const error = io.error ?? ((message) => console.error(message));
+
+    return {
+        evaluate(source) {
+            try {
+                const result = executeSource(source, runtime);
+                const formatted = formatReplResult(result);
+
+                if (formatted !== null) {
+                    log(formatted);
+                }
+
+                return {
+                    action: "continue",
+                    ok: true,
+                    result,
+                };
+            } catch (err) {
+                error(err.message);
+                return {
+                    action: "continue",
+                    ok: false,
+                    error: err,
+                };
+            }
+        },
+
+        handleLine(line) {
+            const source = line.trim();
+
+            if (source === "") {
+                return {
+                    action: "continue",
+                    ok: true,
+                };
+            }
+
+            if (source === ".help") {
+                log("Commands: .help, .exit");
+                return {
+                    action: "continue",
+                    ok: true,
+                };
+            }
+
+            if (source === ".exit") {
+                return {
+                    action: "exit",
+                    ok: true,
+                };
+            }
+
+            return this.evaluate(source);
+        },
+    };
+}
+
+function startRepl(options = {}) {
+    const input = options.input ?? process.stdin;
+    const output = options.output ?? process.stdout;
+    const prompt = options.prompt ?? "vyzon> ";
+    const session = createReplSession(options.io);
+
+    const rl = readline.createInterface({
+        input,
+        output,
+        prompt,
+    });
+
+    output.write("Vyzon REPL. Type .help for commands.\n");
+    rl.prompt();
+
+    rl.on("line", (line) => {
+        const result = session.handleLine(line);
+
+        if (result.action === "exit") {
+            rl.close();
+            return;
+        }
+
+        rl.prompt();
+    });
+
+    return rl;
+}
+
 function main(argv) {
     const [_node, _path, mode, exp] = argv;
-    const parser = new Parser();
-    const interpreter = new Interpreter();
+    const runtime = createRuntime();
+
+    if (mode == null) {
+        return startRepl();
+    }
 
     if (mode == "-e") {
-        const parsedExp = parser.parse(exp).body;
-        return interpreter.interpret(parsedExp);
+        return executeSource(exp, runtime);
     }
 
     if (mode == "-f") {
-        const src = fs.readFileSync(exp, "utf-8");
-        const parsedExp = parser.parse(src).body;
-        return interpreter.interpret(parsedExp);
+        return executeFile(exp, runtime);
     }
 }
 
@@ -37,4 +156,11 @@ if (require.main === module) {
     run(process.argv);
 }
 
-module.exports = { main, run };
+module.exports = {
+    createReplSession,
+    executeFile,
+    executeSource,
+    main,
+    run,
+    startRepl,
+};
