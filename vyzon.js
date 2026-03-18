@@ -1,6 +1,12 @@
 const Environment = require("./Environment.js");
 const { Parser } = require("./parser/Parser.js");
 
+class ReturnSignal {
+    constructor(value) {
+        this.value = value;
+    }
+}
+
 class Interpreter {
     constructor(global = GlobalEnvironment) {
         this.global = global;
@@ -14,6 +20,9 @@ class Interpreter {
         let result;
         for (const statement of body) {
             result = this.Statement(statement, env);
+            if (result instanceof ReturnSignal) {
+                return result;
+            }
         }
         return result;
     }
@@ -118,17 +127,24 @@ class Interpreter {
     }
 
     ReturnStatement(node, env) {
-        return this.Expression(node.argument, env);
+        const value =
+            node.argument !== null ? this.Expression(node.argument, env) : null;
+        return new ReturnSignal(value);
     }
 
     ForStatement(node, env) {
         let result;
-        for (
+
+        if (node.init) {
             this.Statement(node.init, env);
-            this.Expression(node.test, env);
-            this.Expression(node.update, env)
-        ) {
+        }
+
+        while (node.test ? this.Expression(node.test, env) : true) {
             result = this.Statement(node.body, env);
+
+            if (node.update) {
+                this.Expression(node.update, env);
+            }
         }
 
         return result;
@@ -256,7 +272,8 @@ class Interpreter {
 
         const activationEnv = new Environment(activationRecord, method.env);
 
-        return this.Statement(method.body, activationEnv);
+        const result = this.Statement(method.body, activationEnv);
+        return result instanceof ReturnSignal ? result.value : result;
     }
 
     _callSuperExpression(node, env) {
@@ -290,7 +307,8 @@ class Interpreter {
             constructor.env
         );
 
-        return this.Statement(constructor.body, activationEnv);
+        const result = this.Statement(constructor.body, activationEnv);
+        return result instanceof ReturnSignal ? result.value : result;
     }
 
     _normalCallExpression(node, env) {
@@ -309,7 +327,8 @@ class Interpreter {
 
         const activationEnv = new Environment(activationRecord, fn.env);
 
-        return this.Statement(fn.body, activationEnv);
+        const result = this.Statement(fn.body, activationEnv);
+        return result instanceof ReturnSignal ? result.value : result;
     }
 
     _callWriteExpression(node, env) {

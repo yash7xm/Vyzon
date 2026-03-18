@@ -109,7 +109,7 @@ class Tokenizer {
     }
 
     getNextToken() {
-        if (!this.hasMoreTokens) return null;
+        if (!this.hasMoreTokens()) return null;
 
         const string = this._string.slice(this._cursor);
 
@@ -127,6 +127,8 @@ class Tokenizer {
                 value: tokenValue,
             };
         }
+
+        throw new SyntaxError(`Unexpected token: "${string[0]}"`);
     }
 
     _match(regexp, string) {

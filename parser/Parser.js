@@ -23,7 +23,16 @@ class Parser {
     }
 
     StatementList(stopLookAhead = null) {
-        const statementList = [this.Statement()];
+        const statementList = [];
+
+        if (
+            this._lookahead == null ||
+            this._lookahead.type === stopLookAhead
+        ) {
+            return statementList;
+        }
+
+        statementList.push(this.Statement());
         while (
             this._lookahead != null &&
             this._lookahead.type !== stopLookAhead
