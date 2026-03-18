@@ -52,3 +52,14 @@ test("Interpreter resolves imports from the modules directory", () => {
 
     assert.deepEqual(logs, [[1, 2, 3], [12.571428571428571]]);
 });
+
+test("Interpreter instances do not share global variables between runs", () => {
+    captureLogs(() => {
+        interpret("let a = 10; write(a);");
+    });
+
+    assert.throws(
+        () => interpret("write(a);"),
+        /Variable "a" is not defined/
+    );
+});

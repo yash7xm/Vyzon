@@ -7,8 +7,16 @@ class ReturnSignal {
     }
 }
 
+function createGlobalEnvironment() {
+    return new Environment({
+        null: null,
+        true: true,
+        false: false,
+    });
+}
+
 class Interpreter {
-    constructor(global = GlobalEnvironment) {
+    constructor(global = createGlobalEnvironment()) {
         this.global = global;
     }
 
@@ -545,11 +553,5 @@ class Interpreter {
         return node.value;
     }
 }
-
-const GlobalEnvironment = new Environment({
-    null: null,
-    true: true,
-    false: false,
-});
 
 module.exports = { Interpreter };

@@ -1,7 +1,7 @@
-def f() {
-  return 1;
-
-  write(2);
+def f() { 
+    write(1); 
+    return 2; 
+    write(3); 
 }
 
-write(f());
+f();

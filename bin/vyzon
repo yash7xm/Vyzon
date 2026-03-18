@@ -7,11 +7,10 @@ const fs = require("fs");
 const { Parser } = require("../parser/Parser.js");
 const { Interpreter } = require("../vyzon.js");
 
-const parser = new Parser();
-const interpreter = new Interpreter();
-
 function main(argv) {
     const [_node, _path, mode, exp] = argv;
+    const parser = new Parser();
+    const interpreter = new Interpreter();
 
     if (mode == "-e") {
         const parsedExp = parser.parse(exp).body;

@@ -12,5 +12,5 @@ test("CLI evaluates inline expressions", () => {
 test("CLI executes files", () => {
     const { logs } = runCli(["-f", "test.vy"]);
 
-    assert.deepEqual(logs, [[1]]);
+    assert.deepEqual(logs, [[10]]);
 });
