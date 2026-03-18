@@ -1,1 +1,7 @@
-write(2 + 2);
+def f() {
+  return 1;
+
+  write(2);
+}
+
+write(f());

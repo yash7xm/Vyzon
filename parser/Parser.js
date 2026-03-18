@@ -425,7 +425,7 @@ class Parser {
             const operator = this._eat("LOGICAL_OR").value;
             const right = this.LogicalANDExpression();
 
-            return {
+            left = {
                 type: "LogicalORExpression",
                 operator,
                 left,
@@ -443,7 +443,7 @@ class Parser {
             const operator = this._eat("LOGICAL_AND").value;
             const right = this.EqualityExpression();
 
-            return {
+            left = {
                 type: "LogicalANDExpression",
                 operator,
                 left,
@@ -461,7 +461,7 @@ class Parser {
             const operator = this._eat("EQUALITY_OPERATOR").value;
             const right = this.RelationalExpression();
 
-            return {
+            left = {
                 type: "BinaryExpression",
                 operator,
                 left,
@@ -479,7 +479,7 @@ class Parser {
             const operator = this._eat("RELATIONAL_OPERATOR").value;
             const right = this.AdditiveExpression();
 
-            return {
+            left = {
                 type: "BinaryExpression",
                 operator,
                 left,
